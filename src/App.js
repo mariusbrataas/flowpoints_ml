@@ -32,7 +32,7 @@ class App extends Component {
         snapY: 10,
         showSnackbar: false,
         snackbarMsg: 'Wubbalubbadubdub',
-        url: 'http://192.168.8.113:3000'
+        url: 'https://mariusbrataas.github.io/flowpoints_ml'
       }
     };
     this.updateLastPos = this.updateLastPos.bind(this)
@@ -114,8 +114,8 @@ class App extends Component {
       this.setOutputShapes(inps, order)
     }
     if (order.length > 0) {
-      window.history.replaceState({}, null, this.state.settings.url + '/load?' + gen_url(this.state.flowpoints, order))
-      //window.history.replaceState({}, null, this.state.settings.url + '/?p=' + 'load?' + gen_url(this.state.flowpoints, order))
+      //window.history.replaceState({}, null, this.state.settings.url + '/load?' + gen_url(this.state.flowpoints, order))
+      window.history.replaceState({}, null, this.state.settings.url + '/?p=' + 'load?' + gen_url(this.state.flowpoints, order))
     } else {
       window.history.replaceState({}, null, this.state.settings.url)
     }

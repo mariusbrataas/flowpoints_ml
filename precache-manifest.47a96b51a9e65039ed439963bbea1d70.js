@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/flowpoints_ml/static/css/main.4a8b45f7.chunk.css"
   },
   {
-    "revision": "4db27777550d22079f727b3b51348f82",
+    "revision": "843dd863440f521c1fdee7523b0c97e9",
     "url": "/flowpoints_ml/index.html"
   }
 ];

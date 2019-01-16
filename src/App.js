@@ -117,7 +117,7 @@ class App extends Component {
       //window.history.replaceState({}, null, this.state.settings.url + '/load?' + gen_url(this.state.flowpoints, order))
       window.history.replaceState({}, null, this.state.settings.url + '/?p=' + 'load?' + gen_url(this.state.flowpoints, order))
     } else {
-      window.history.replaceState({}, null, this.state.settings.url)
+      window.history.replaceState({}, null, this.state.settings.url + '/')
     }
     return (
       <div>

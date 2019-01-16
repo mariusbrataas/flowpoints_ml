@@ -1,4 +1,4 @@
-![](Imagine.png)
+![](public/Imagine.png)
 
 # Flowpoints ML
 Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)

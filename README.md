@@ -67,6 +67,7 @@ Some ideas I'd like to implement:
 
 - __Support for other ML frameworks__ (Keras, TF...). This can probably be implemented easily in the flowchart-to-code parser (in the src/flowparser directory).
 - __Pre-processing.__ Maybe something utilising the [torch data loader](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), with support for multiple workers and use of [transforms](https://pytorch.org/docs/stable/torchvision/transforms.html).
+- __Better support for mobile.__ Not so great on my phone, kinda ok on my iPad.
 - __Python load model by link??__ Maybe not possible, but would be awesome!
 
 Also, this project is structured in a somewhat okay manner, but I'm not entirely happy with it, and might change it soon.

@@ -8,7 +8,18 @@ This project is used to host a website in which users can quickly create drafts 
 
 The code output to the user is written in python and utilises [PyTorch](https://pytorch.org/).
 
-{{TOC}}
+- [Overview](#overview)
+	- [How I use these diagrams](#how-i-use-these-diagrams)
+- [User guide](#user-guide)
+	- [Building new models](#building-new-models)
+	- [Editing parameters](#editing-parameters)
+	- [Sharing](#sharing)
+- [Contributing to this project](#contributing-to-this-project)
+- [About](#about)
+	- [Background](#background)
+	- [Pure JSX flowcharting spin-off](#pure-jsx-flowcharting-spin-off)
+- [Dependencies](#dependencies)
+- [License](#license)
 
 ### How I use these diagrams
 1. Start by adding an input block and edit it's parameters to get the correct number of dimensions and features.

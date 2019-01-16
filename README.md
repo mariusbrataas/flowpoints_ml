@@ -1,7 +1,7 @@
 ![](Imagine.png)
 
 # Flowpoints ML
-Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml/?p=load?0&x&i&3&0,0&64,96_3&fc1&0&2,8&44,0&1,96,64_2&fc1act1&31&9&44,11&0_9&fc2&0&16&88,0&1,64,64_16&fc2act&31&10&88,11&0_8&fc1act2&40&10&44,22&_10&fc3&0&18&132,22&1,64,10_18&fc3act&36&&132,33&) to play around with this graphical interface on your own :)
+Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)
 
 ## Overview
 This project is used to host a website in which users can quickly create drafts for deep learning models and have the equivalent plug-and-play code output immediately.

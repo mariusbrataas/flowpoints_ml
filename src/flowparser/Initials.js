@@ -1,7 +1,7 @@
 import React from 'react';
 
 function getWelcome() {
-  var msg = '# Created with https://mariusbrataas.github.io/torchflow/\n'
+  var msg = '# Created with https://mariusbrataas.github.io/flowpoints_ml/\n'
   return msg
 }
 

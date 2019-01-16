@@ -134,7 +134,6 @@ export const Flowpoint = (props) => {
         cancel='.card-contents'
         defaultPosition={{x: localState.x - (localState.x % snapX), y: localState.y - (localState.y % snapY)}}
         onDrag={(event, dragElement) => {
-          event.preventDefault()
           var flowpoints = refresh().flowpoints
           var myState = flowpoints[key]
           myState.x = dragElement.x

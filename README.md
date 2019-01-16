@@ -42,7 +42,7 @@ Click the + button again, and a new flowpoint shows up. On each side of a flowpo
 
 Inside the flowpoint - at the top right - there's a dropdown button. Click this to access and modify more of the flowpoint's settings.
 
-Here's and [example](https://mariusbrataas.github.io/flowpoints_ml/?p=load?0&x&i&2&0,0&1,64_2&fc1&0&1&44,0&1,64,32_1&act1&40&3&44,12&_3&fc2&0&4&88,0&1,32,10_4&act2&36&&88,12&) for you!
+Here's an [example](https://mariusbrataas.github.io/flowpoints_ml/?p=load?0&x&i&2&0,0&1,64_2&fc1&0&1&44,0&1,64,32_1&act1&40&3&44,12&_3&fc2&0&4&88,0&1,32,10_4&act2&36&&88,12&) for you!
 
 The green <> button can be used to show or hide the code for the current model. This code is updated live as you edit the model (I find that kind of satisfying to watch). The syntax highlighting here relies on [this awesome project](https://github.com/conorhastings/react-syntax-highlighter).
 

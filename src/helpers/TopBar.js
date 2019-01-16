@@ -22,7 +22,7 @@ export const TopBar = (props) => {
           </div>
           <IconButton
             style={{color:'#ffffff'}}
-            href="https://github.com/mariusbrataas"
+            href="https://github.com/mariusbrataas/flowpoints_ml"
             target="_blank">
             <FaGithub/>
           </IconButton>

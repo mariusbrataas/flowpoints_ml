@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/flowpoints_ml/precache-manifest.3286f4140af79b8fac6911dddc5023b5.js"
+  "/flowpoints_ml/precache-manifest.b0b441438d13b364f30c94b8596a5e55.js"
 );
 
 workbox.clientsClaim();

@@ -29,16 +29,6 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 
 import copy from 'copy-to-clipboard';
 
-function Clone(obj) {
-  if (Array.isArray(obj)) return obj.map(tmp => Clone(tmp))
-  if (typeof obj === 'object') {
-    var new_obj = {}
-    Object.keys(obj).map(key => new_obj[key] = Clone(obj[key]))
-    return new_obj
-  }
-  return obj
-}
-
 function shapeBox(shape) {
   var msg = '['
   shape.map(val => {
@@ -62,8 +52,6 @@ function ReplaceAll(str, search, replacement) {
 }
 
 
-//mariusbrataas.github.io/flowpoints_ml/?p=load?PDT_9_41e2f4_4164f4_0&This%20is&9&9&&3aa,4aa,5aa,6aa,8aa&1%1,2_1&how%20I&9&g&&3aa,4aa,5aa,6aa,8aa&1%1,2_3&imagine&12&l&0&6aa,8aa&t,1,1_4&learning&12&z&0&1aa,6aa,8aa&t,1,1_5&deep&12&s&0&6aa,8aa&t,1,1_6&models%20in&1v&13&0&&t,1,1_8&my%20mind&1v&1a&0&&t,1,1
-//mariusbrataas.github.io/flowpoints_ml/?p=load?PDT_9_41e2f4_4164f4_0&This%20is&&3aa%2C4aa%2C5aa%2C6aa%2C8aa&1%251%2C2_1&how%20I&g&1%251%2C2_3&imagine&l&6aa%2C8aa&t%2C1%2C1_4&learning&z&1aa%2C6aa%2C8aa&t%2C1%2C1_5&deep&s&t%2C1%2C1_6&models%20in&1v&t%2C1%2C1_8&my%20mind&1a&t%2C1%2C1
 class App extends Component {
   constructor(props) {
     super(props);
@@ -76,7 +64,7 @@ class App extends Component {
       current_url: '',
       url: '',
       settings:{
-        tab: 'Settings',
+        tab: 'Misc',
         theme: 'indigo',
         background: 'black',
         variant:'outlined',
@@ -102,6 +90,7 @@ class App extends Component {
     this.baseUrl = window.location.href.split('/?')[0]
     if (this.baseUrl[this.baseUrl.length - 1] !== '/') this.baseUrl += '/'
     this.lib = {}
+    this.diagramRef = null;
 
     // Binding class methods
     this.addFlowpoint = this.addFlowpoint.bind(this);
@@ -132,7 +121,6 @@ class App extends Component {
         getDB(data => {
 
           query = query.split('?p=')[1].substring(0, 15)
-          console.log(query)
           query = data[query]
 
           if (query) {
@@ -324,13 +312,15 @@ class App extends Component {
           deleteSelected={this.deleteSelected}
           darktheme={this.state.settings.darktheme}
           code={this.state.code}
-          updatePointSettings={this.updatePointSettings}/>
+          updatePointSettings={this.updatePointSettings}
+          diagramRef={this.diagramRef}/>
 
         <Flowspace
           theme={this.state.settings.theme}
           variant={this.state.settings.variant}
           background={this.state.settings.darktheme ? 'black' : 'white'}
           selected={this.state.selected}
+          getDiagramRef={ref => {this.diagramRef = ref}}
           avoidCollisions={this.state.settings.avoidCollisions}
           onClick={e => {this.setState({ selected:null })}}
           style={{

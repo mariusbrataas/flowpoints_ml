@@ -12,12 +12,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
 
-import Snackbar from '@material-ui/core/Snackbar';
-import green from '@material-ui/core/colors/green';
-
-import Divider from '@material-ui/core/Divider';
-import Chip from '@material-ui/core/Chip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import red from '@material-ui/core/colors/red';
 
@@ -32,6 +28,10 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+
+import { FaGithub, FaLinkedin, FaNpm } from "react-icons/fa";
+
+var htmlToImage = require('html-to-image');
 
 const darktheme = createMuiTheme({
   palette: {
@@ -169,6 +169,23 @@ const SettingsTab = (props) => {
             )
           })
         }
+      </div>
+
+      <div style={{paddingTop:20}}>
+        <Button
+          variant="outlined"
+          onClick={(e) => {
+            htmlToImage.toPng(props.diagramRef).then(function (dataUrl) {
+              var img = new Image();
+              img.src = dataUrl;
+              var link = document.createElement('a');
+              link.download = 'diagram.png';
+              link.href = dataUrl;
+              link.click();
+            })
+          }}>
+          Export png
+        </Button>
       </div>
 
     </div>
@@ -459,9 +476,21 @@ export const Sidebar = (props) => {
             Flowpoints ML
           </Typography>
 
+          <div style={{position:'absolute', right:5, top:5}}>
+            <IconButton target='_blank' href='https://www.npmjs.com/package/flowpoints'>
+              <FaNpm/>
+            </IconButton>
+            <IconButton target='_blank' href='https://www.linkedin.com/in/marius-brataas-355567106/'>
+              <FaLinkedin/>
+            </IconButton>
+            <IconButton target='_blank' href='https://github.com/mariusbrataas/flowpoints_ml#readme'>
+              <FaGithub/>
+            </IconButton>
+          </div>
+
           <div>
             <TabContainer
-              tabs={['Settings', 'Code', 'Flowpoint']}
+              tabs={['Misc', 'Code', 'Flowpoint']}
               tab={props.settings.tab}
               width={350}
               onSelectTab={(value) => {
@@ -480,13 +509,14 @@ export const Sidebar = (props) => {
 
             <div>
               {
-                props.settings.tab === 'Settings' ? <SettingsTab
+                props.settings.tab === 'Misc' ? <SettingsTab
                   environment={props.environment}
                   flowpoints={props.flowpoints}
                   refresh={props.refresh}
                   updateEnv={props.updateEnv}
                   settings={props.settings}
-                  updateSettings={props.updateSettings}/> : null
+                  updateSettings={props.updateSettings}
+                  diagramRef={props.diagramRef}/> : null
               }
               {
                 props.settings.tab === 'Code' ? <CodeTab

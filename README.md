@@ -4,11 +4,13 @@
 
 Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)
 
+[This npm package](https://www.npmjs.com/package/flowpoints) is a spin-off of this project, which this project is now utilizing.
+
 
 ## Overview
 This project is used to host a website in which users can quickly create drafts for deep learning models and have the equivalent plug-and-play code output immediately.
 
-The code output to the user is written in python and utilises [PyTorch](https://pytorch.org/). In the future I will implement the option to utilize other libraries as well.
+The code output to the user is written in python and utilizes [PyTorch](https://pytorch.org/). In the future I will implement the option to utilize other libraries as well.
 
 - [Overview](#overview)
 - [User guide](#user-guide)
@@ -357,8 +359,8 @@ As of right now the code is not properly commented, but I'll do that pretty soon
 
 Some ideas I'd like to implement:
 
-- __Support for other ML frameworks__ (Keras, TF...). This can probably be implemented easily in the flowchart-to-code parser (in the src/flowparser directory).
-- __Pre-processing.__ Maybe something utilising the [torch data loader](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), with support for multiple workers and use of [transforms](https://pytorch.org/docs/stable/torchvision/transforms.html).
+- __Support for other ML frameworks__ (Keras, TF...). This can probably be implemented easily in the flowchart-to-code parser (in the src/sidebar/parsers directory).
+- __Pre-processing.__ Maybe something utilizing the [torch data loader](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), with support for multiple workers and use of [transforms](https://pytorch.org/docs/stable/torchvision/transforms.html).
 - __Better support for mobile.__ Not so great on my phone, kinda ok on my iPad.
 - __Python load model by link??__ Maybe not possible, but would be awesome!
 

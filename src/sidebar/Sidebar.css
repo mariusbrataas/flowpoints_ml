@@ -1,0 +1,14 @@
+.fullSidebar {
+  height: 100vh;
+  width: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: max-width 0.4s ease-out;
+}
+
+.scrollBox {
+  min-height: 0;
+  overflow: auto;
+  flex-grow: 1;
+}

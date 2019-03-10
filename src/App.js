@@ -1,174 +1,474 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { Flowpoint, Flowspace } from 'flowpoints';
+import { FlowOrder } from './sidebar/FlowOrder.js';
+import { PyTorchParser } from './sidebar/parsers/Parsers.js';
+import { PyTorchModules } from './libraries/pytorch.js';
+import { Sidebar } from './sidebar/Sidebar.js';
+import { parseToQuery, parseFromQuery } from './URLparser.js';
+import { postToDB, getDB } from './DBhandler.js';
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import MenuIcon from '@material-ui/icons/Menu';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import LinkIcon from '@material-ui/icons/Link';
 import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-// Importing local tools
-import { Codepaper } from './flowparser/Codepaper.js'
-import { AppBottom, gen_url, parse_url } from './helpers/AppBottom.js'
-import { DrawConnections } from './helpers/DrawConnections.js'
-import { DrawPoints } from './flowpoint/DrawPoints.js'
-import { TopBar } from './helpers/TopBar.js'
-import { getOrdered, getInputs } from './flowparser/FlowOrder'
+import green from '@material-ui/core/colors/green';
+import red from '@material-ui/core/colors/red';
+import grey from '@material-ui/core/colors/grey';
+import blue from '@material-ui/core/colors/blue';
+import indigo from '@material-ui/core/colors/indigo';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import lightBlue from '@material-ui/core/colors/lightBlue';
+import teal from '@material-ui/core/colors/teal';
+import blueGrey from '@material-ui/core/colors/blueGrey';
+
+import copy from 'copy-to-clipboard';
+
+function Clone(obj) {
+  if (Array.isArray(obj)) return obj.map(tmp => Clone(tmp))
+  if (typeof obj === 'object') {
+    var new_obj = {}
+    Object.keys(obj).map(key => new_obj[key] = Clone(obj[key]))
+    return new_obj
+  }
+  return obj
+}
+
+function shapeBox(shape) {
+  var msg = '['
+  shape.map(val => {
+    msg += val + ','
+  })
+  if (shape.length > 0) msg = msg.substring(0, msg.length - 1)
+  msg += ']'
+  return (
+    <div style={{textAlign:'center', paddingBottom:'10px'}}>
+      {
+        msg
+      }
+    </div>
+  )
+}
+
+function ReplaceAll(str, search, replacement) {
+  var newstr = ''
+  str.split(search).map(val => {newstr += val + replacement})
+  return newstr.substring(0, newstr.length - replacement.length)
+}
 
 
+//mariusbrataas.github.io/flowpoints_ml/?p=load?PDT_9_41e2f4_4164f4_0&This%20is&9&9&&3aa,4aa,5aa,6aa,8aa&1%1,2_1&how%20I&9&g&&3aa,4aa,5aa,6aa,8aa&1%1,2_3&imagine&12&l&0&6aa,8aa&t,1,1_4&learning&12&z&0&1aa,6aa,8aa&t,1,1_5&deep&12&s&0&6aa,8aa&t,1,1_6&models%20in&1v&13&0&&t,1,1_8&my%20mind&1v&1a&0&&t,1,1
+//mariusbrataas.github.io/flowpoints_ml/?p=load?PDT_9_41e2f4_4164f4_0&This%20is&&3aa%2C4aa%2C5aa%2C6aa%2C8aa&1%251%2C2_1&how%20I&g&1%251%2C2_3&imagine&l&6aa%2C8aa&t%2C1%2C1_4&learning&z&1aa%2C6aa%2C8aa&t%2C1%2C1_5&deep&s&t%2C1%2C1_6&models%20in&1v&t%2C1%2C1_8&my%20mind&1a&t%2C1%2C1
 class App extends Component {
   constructor(props) {
     super(props);
-    this.bezierOffset = 90
-    this.lastPosX = 0
-    this.lastPosY = 0
-    this.maxX = 0
-    this.maxY = 0
     this.state = {
+      lastPos: {x:50, y:-40},
+      code: '',
+      selected: null,
+      count: 0,
       flowpoints: {},
-      settings: {
-        count: 0,
-        zoom: 1.0,
-        currentInput: null,
-        currentOutput: null,
-        showPaper: false,
-        snapX: 10,
-        snapY: 10,
-        showSnackbar: false,
-        snackbarMsg: 'Wubbalubbadubdub',
-        url: 'https://mariusbrataas.github.io/flowpoints_ml'
+      current_url: '',
+      url: '',
+      settings:{
+        tab: 'Settings',
+        theme: 'indigo',
+        background: 'black',
+        variant:'outlined',
+        drawerWidth: 350,
+        darktheme: true,
+        showShape: false,
+        showName: false,
+        showSidebar: true,
+        avoidCollisions: true,
+        snackshow: false,
+        snackmsg: 'Hello world',
+        snackcolor: green['A700'],
+        modelUrl: null
+      },
+      environment: {
+        library: 'PyTorch',
+        libraries: [ 'PyTorch' ],
+        getModules: PyTorchModules
       }
-    };
-    this.updateLastPos = this.updateLastPos.bind(this)
-    this.updateFrameSize = this.updateFrameSize.bind(this)
-    this.autoFrameSize = this.autoFrameSize.bind(this)
-    this.setOutputShapes = this.setOutputShapes.bind(this)
+    }
+
+    // Helpers
+    this.baseUrl = window.location.href.split('/?')[0]
+    if (this.baseUrl[this.baseUrl.length - 1] !== '/') this.baseUrl += '/'
+    this.lib = {}
+
+    // Binding class methods
+    this.addFlowpoint = this.addFlowpoint.bind(this);
+    this.handleClickPoint = this.handleClickPoint.bind(this);
+    this.deleteSelected = this.deleteSelected.bind(this);
+    this.prepCode = this.prepCode.bind(this);
+    this.prepOutputShapes = this.prepOutputShapes.bind(this);
+    this.updatePointSettings = this.updatePointSettings.bind(this);
+
   }
-  updateLastPos(x, y) {
-    this.lastPosX = x
-    this.lastPosY = y
-  }
-  updateFrameSize(x, y) {
-    this.maxX = x
-    this.maxY = y
-  }
-  autoFrameSize() {
-    const flowpoints = this.state.flowpoints
-    const mult = this.state.settings.showPaper ? 4 : 2
-    var maxX = 10
-    var maxY = 10
-    Object.keys(flowpoints).map((key) => {
-      const point = flowpoints[key]
-      maxX = Math.max(maxX, point.x + mult * point.width)
-      maxY = Math.max(maxY, point.y + 2 * point.height)
-    })
-    this.updateFrameSize(maxX, maxY)
-  }
-  componentWillMount() {
-    const addr = window.location.href
-    if (addr.includes('load?')) {
+
+
+  componentDidMount() {
+    var query = window.location.href.split(this.baseUrl)[1]
+
+    if (query.includes('p=')) {
+
+      // Snack message
+      var settings = this.state.settings;
+      settings.snackshow = true;
+      settings.snackmsg = 'Trying to load model';
+      settings.snackcolor = blue['A700'];
+      settings.modelUrl = this.baseUrl + query.substring(0, 18)
+      this.setState({settings})
+
       try {
-        var flowpoints = parse_url(addr.split('load?')[1])
-        var settings = this.state.settings
-        var max_idx = 0
-        Object.keys(flowpoints).map(key => {
-          max_idx = Math.max(max_idx, parseInt(key) + 1)
+
+        getDB(data => {
+
+          query = query.split('?p=')[1].substring(0, 15)
+          console.log(query)
+          query = data[query]
+
+          if (query) {
+            query = ReplaceAll(query, 'lll', '.')
+            var newlib = parseFromQuery(query)
+
+            // Updating settings and env
+            settings = this.state.settings;
+            var environment = this.state.environment;
+            settings.darktheme = newlib.darktheme;
+            settings.showName = newlib.showName;
+            settings.theme = newlib.theme;
+            settings.background = newlib.background;
+            settings.variant = newlib.variant;
+            settings.showSidebar = newlib.showSidebar;
+            environment.library = newlib.library;
+
+            // Snack message
+            settings.snackshow = true;
+            settings.snackmsg = 'Loaded model from URL';
+            settings.snackcolor = green['A700'];
+
+            // Updating self
+            this.setState({
+              count:newlib.count,
+              flowpoints:newlib.flowpoints,
+              settings:settings,
+              environment:environment
+            }, () => {
+              this.prepOutputShapes();
+              this.prepCode();
+            })
+
+          }
+
         })
-        settings.count = max_idx
-        this.setState({flowpoints, settings})
-      } catch (error) {
-        var settings = this.state.settings
-        settings.snackbarMsg = 'Failed to load model.'
-        settings.showSnackbar = true
-        this.setState({settings})
+
+      } catch(err) {
+        console.log(err)
+        var settings = this.state.settings;
+        settings.snackshow = true;
+        settings.snackmsg = 'Failed to load from URL';
+        settings.snackcolor = red['A400'];
+        this.setState({ settings });
       }
+
+    } else {
+      this.prepOutputShapes();
+      this.prepCode();
     }
   }
-  setOutputShapes(inps, order) {
-    order.map((key, index) => {
-      var point = this.state.flowpoints[key]
-      var params = null
-      if (!point.flowtype.includes('input')) {
-        if (point.flowtype in point.layertypes) {
-          params = point.layertypes[point.flowtype]
-        } else {
-          params = point.activationtypes[point.flowtype]
-        }
-        var bestInp = null
-        point.inputs.map(inpkey => {
-          if (order.indexOf(key) > order.indexOf(inpkey)) {
-            bestInp = inpkey
-          }
-        })
-        if (bestInp != null) {
-          params.params = params.autoparams(this.state.flowpoints[bestInp].output_shape, params.params)
-          this.state.flowpoints[key].output_shape = params.outshape(this.state.flowpoints[bestInp].output_shape, params.params)
-        }
+
+
+  prepCode() {
+
+    // Selecting parser
+    var parser = null;
+    if (this.state.environment.library === 'PyTorch') parser = PyTorchParser;
+
+    // Parsing code and updating state
+    this.setState({ code:parser(this.state.flowpoints, this.lib, this.state.settings.modelUrl) + '\n\n\n' })
+
+  }
+
+
+  prepOutputShapes() {
+
+    // Helper
+    var flowpoints = this.state.flowpoints;
+
+    // Getting floworder and updating lib
+    this.lib = FlowOrder(flowpoints)
+
+    // Setting output-shapes of inputs
+    var visited = []
+    this.lib.order.map(key => {
+      if (this.lib.lib[key].specTitle === 'Input') {
+        flowpoints[key].output_shape = flowpoints[key].specs.outshape(null, flowpoints[key].specs.params)
+        visited.push(key)
       }
     })
+
+    // Setting all output-shapes
+    this.lib.order.map(key => {
+      if (!visited.includes(key)) {
+        var bestInp = null
+        Object.keys(this.lib.lib[key].inputs).map(inp_key => {
+          if (visited.includes(inp_key)) bestInp = inp_key
+        })
+        flowpoints[key].specs.params = flowpoints[key].specs.autoparams(flowpoints[bestInp].output_shape, flowpoints[key].specs.params)
+        flowpoints[key].output_shape = flowpoints[key].specs.outshape(flowpoints[bestInp].output_shape, flowpoints[key].specs.params)
+        visited.push(key)
+      }
+    })
+
+    // Updating state
+    this.setState({ flowpoints })
+
   }
-  render() {
-    this.autoFrameSize()
-    var order = []
-    var inps = []
-    if (Object.keys(this.state.flowpoints).length != 0) {
-      inps = getInputs(this.state.flowpoints)
-      order = getOrdered(this.state.flowpoints, inps)
-      // Updating output shapes
-      this.setOutputShapes(inps, order)
+
+
+  updatePointSettings(key, settings) {
+    var flowpoints = this.state.flowpoints;
+    flowpoints[key] = settings;
+    this.setState({ flowpoints });
+    this.prepOutputShapes();
+    this.prepCode();
+  }
+
+
+  deleteSelected() {
+    var flowpoints = this.state.flowpoints;
+    delete flowpoints[this.state.selected]
+    Object.keys(flowpoints).map(test_key => {
+      if (this.state.selected in flowpoints[test_key].outputs) {
+        delete flowpoints[test_key].outputs[this.state.selected];
+      }
+    })
+    this.setState({flowpoints, selected:null});
+    this.prepOutputShapes();
+    this.prepCode();
+  }
+
+
+  addFlowpoint() {
+    var flowpoints = this.state.flowpoints;
+    flowpoints['' + this.state.count] = {
+      name: '',
+      output_shape: [],
+      pos: {x:this.state.lastPos.x, y:this.state.lastPos.y + 90},
+      outputs: {},
+      isHover: false,
+      specs: this.state.environment.getModules().linear
     }
-    if (order.length > 0) {
-      //window.history.replaceState({}, null, this.state.settings.url + '/load?' + gen_url(this.state.flowpoints, order))
-      window.history.replaceState({}, null, this.state.settings.url + '/?p=' + 'load?' + gen_url(this.state.flowpoints, order))
+    if (this.state.selected) {
+      flowpoints[this.state.selected].outputs['' + this.state.count] = {
+        output:'auto',
+        input:'auto'
+      }
+    }
+    this.setState({ flowpoints, count:this.state.count + 1, lastPos:{x:this.state.lastPos.x, y:this.state.lastPos.y + 90}, selected:'' + (this.state.count) })
+    this.prepOutputShapes();
+    this.prepCode();
+  }
+
+
+  handleClickPoint(key, e) {
+    var selected = this.state.selected
+    var flowpoints = this.state.flowpoints
+    if (e.shiftKey) {
+      if (selected === null) {
+        selected = key
+      } else {
+        if (selected !== key) {
+          var p1 = flowpoints[selected]
+          if (key in p1.outputs) {
+            delete p1.outputs[key]
+          } else {
+            p1.outputs[key] = {
+              output:'auto',
+              input:'auto',
+              onClick:this.handleClickLine
+            }
+          }
+        }
+      }
     } else {
-      window.history.replaceState({}, null, this.state.settings.url + '/')
+      selected = (selected === null ? key : (selected === key ? null : key))
     }
+    this.setState({selected, flowpoints})
+    this.prepOutputShapes();
+    this.prepCode();
+  }
+
+
+  render() {
     return (
-      <div>
-        <div ref={this.mainRef} style={{width:'100vw', height:'90vh', paddingTop:'10vh', overflow:'scroll'}}>
-          <Codepaper
-            flowpoints={this.state.flowpoints}
-            settings={this.state.settings}/>
-          <div style={{transform:'scale(' + this.state.settings.zoom + ')', 'transform-origin':'top left', 'transition':'.1s ease-in-out'}}>
-            <div style={{width:this.maxX+50, height:this.maxY+50, position:'relative'}}>
-              <DrawConnections flowpoints={this.state.flowpoints}/>
-              <DrawPoints
-                flowpoints={this.state.flowpoints}
-                updateLastPos={this.updateLastPos}
-                lastPosX={this.lastPosX}
-                lastPosY={this.lastPosY}
-                state={this.state}
-                refresh={() => {return this.state}}
-                updateFlowpoints={(flowpoints) => {this.setState({flowpoints})}}
-                updateSettings={(settings) => {this.setState({settings})}}
-                updateView={(flowpoints, settings) => {this.setState({flowpoints, settings})}}/>
-            </div>
+      <div style={{backgroundColor: (this.state.settings.darktheme ? 'black' : 'white')}}>
+
+        <Sidebar
+          selected={this.state.selected}
+          open={this.state.settings.showSidebar}
+          flowpoints={this.state.flowpoints}
+          settings={this.state.settings}
+          environment={this.state.environment}
+          refresh={() => {return this.state}}
+          updateSettings={(settings) => {this.setState({settings})}}
+          updateEnv={(environment) => {this.setState({environment})}}
+          deleteSelected={this.deleteSelected}
+          darktheme={this.state.settings.darktheme}
+          code={this.state.code}
+          updatePointSettings={this.updatePointSettings}/>
+
+        <Flowspace
+          theme={this.state.settings.theme}
+          variant={this.state.settings.variant}
+          background={this.state.settings.darktheme ? 'black' : 'white'}
+          selected={this.state.selected}
+          avoidCollisions={this.state.settings.avoidCollisions}
+          onClick={e => {this.setState({ selected:null })}}
+          style={{
+            height:'100vh',
+            width:('calc(100vw - ' + this.state.settings.drawerWidth * this.state.settings.showSidebar + ')'),
+            marginLeft:this.state.settings.drawerWidth * this.state.settings.showSidebar + 'px',
+            transition:['margin-left 0.4s ease-out','background-color 0.2s ease-out']
+          }}>
+          {
+            Object.keys(this.state.flowpoints).map(key => {
+              const point = this.state.flowpoints[key];
+              return (
+                <Flowpoint
+                  key={key}
+                  snap={{ x:10, y:10 }}
+                  startPosition={point.pos}
+                  outputs={point.outputs}
+                  onClick={(e) => {
+                    this.handleClickPoint(key, e);
+                  }}
+                  onDrag={pos => {
+                    var flowpoints = this.state.flowpoints;
+                    flowpoints[key].pos = pos;
+                    this.setState({ flowpoints, lastPos:pos })
+                  }}
+                  style={{
+                    height:'auto',
+                    maxHeight: this.state.settings.showShape ? 150 : 50
+                  }}>
+                  <div style={{height:'auto'}}>
+                    <div style={{display:'table', width:'100%', height:'50px'}}>
+                      <div style={{display:'table-cell', verticalAlign:'middle', textAlign:'center'}}>
+                        {
+                          this.state.settings.showName ? (point.name !== '' ? point.name : ('p_' + key)) : point.specs.title
+                        }
+                      </div>
+                    </div>
+                    {
+                      this.state.settings.showShape ? shapeBox(point.output_shape) : null
+                    }
+                  </div>
+                </Flowpoint>
+              )
+            })
+          }
+        </Flowspace>
+
+        <div style={{
+            bottom:'5px',
+            left:this.state.settings.drawerWidth * this.state.settings.showSidebar + 5 + 'px',
+            position:'fixed',
+            transition: 'left 0.4s ease-out'
+          }}>
+          <div style={{paddingBottom:4}}>
+            <Fab
+              style={{background:lightBlue['A400'], color:'#ffffff', zIndex:6, boxShadow:'none'}}
+              aria-label="Add"
+              onClick={() => {this.addFlowpoint()}}>
+              <AddIcon />
+            </Fab>
           </div>
-          <div style={{top:'0px', position:'fixed', zIndex:5}}>
-            <TopBar/>
+          <div style={{paddingBottom:4}}>
+            <Fab
+              style={{background:blue['A400'], color:'#ffffff', zIndex:6, boxShadow:'none'}}
+              aria-label="Copy code"
+              onClick={() => {
+                copy(this.state.code)
+                var settings = this.state.settings;
+                settings.snackshow = true;
+                settings.snackmsg = 'Copied code to clipboard';
+                settings.snackcolor = blue['A400'];
+                this.setState({settings})
+              }}>
+              <FileCopyIcon />
+            </Fab>
           </div>
-          <AppBottom
-            updateLastPos={this.updateLastPos}
-            lastPosX={this.lastPosX}
-            lastPosY={this.lastPosY}
-            state={this.state}
-            order={order}
-            refresh={() => {return this.state}}
-            updateFlowpoints={(flowpoints) => {this.setState({flowpoints})}}
-            updateSettings={(settings) => {this.setState({settings})}}
-            updateView={(flowpoints, settings) => {this.setState({flowpoints, settings})}}/>
-          <Snackbar
-            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-            open={this.state.settings.showSnackbar}
-            autoHideDuration={3000}
-            onClose={() => {
-              var settings = this.state.settings
-              settings.showSnackbar = false
-              this.setState({settings})
-            }}
-            message={this.state.settings.snackbarMsg}
-            style={{width:'auto'}} />
+          <div style={{paddingBottom:4}}>
+            <Fab
+              style={{background:indigo['A400'], color:'#ffffff', zIndex:6, boxShadow:'none'}}
+              aria-label="Copy code"
+              onClick={() => {
+                var new_url = parseToQuery(
+                  this.state.flowpoints,
+                  this.state.settings.theme,
+                  this.state.settings.variant,
+                  this.state.settings.background,
+                  this.state.count,
+                  this.state.settings.darktheme,
+                  this.state.settings.showName,
+                  this.state.environment.library,
+                  this.state.settings.showSidebar
+                )
+                new_url = ReplaceAll(new_url, '.', 'lll')
+                postToDB(new_url, (mod_id) => {
+                  new_url = this.baseUrl + '?p=' + mod_id;
+                  copy(new_url)
+                  var settings = this.state.settings;
+                  settings.snackshow = true;
+                  settings.snackmsg = 'Copied link to clipboard';
+                  settings.snackcolor = indigo['A400'];
+                  settings.modelUrl = new_url
+                  this.setState({settings})
+                })
+              }}>
+              <LinkIcon />
+            </Fab>
+          </div>
+          <div>
+            <Fab
+              style={{background:deepPurple['A400'], color:'#ffffff', zIndex:6, boxShadow:'none'}}
+              aria-label="Hide/Show"
+              onClick={() => {
+                var settings = this.state.settings;
+                settings.showSidebar = !settings.showSidebar;
+                this.setState({settings})
+              }}>
+              <MenuIcon />
+            </Fab>
+          </div>
         </div>
+
+        <Snackbar
+          autoHideDuration={3000}
+          onClose={() => {
+            var settings = this.state.settings;
+            settings.snackshow = false
+            this.setState({ settings })
+          }}
+          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+          open={this.state.settings.snackshow}>
+          <SnackbarContent
+            message={this.state.settings.snackmsg}
+            style={{backgroundColor:this.state.settings.snackcolor, color:'black'}}/>
+        </Snackbar>
+
       </div>
-    )
+    );
   }
 }
-
 
 export default App;

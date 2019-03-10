@@ -1,25 +1,33 @@
 ![](public/Imagine.png)
 
 # Flowpoints ML
+
 Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)
+
 
 ## Overview
 This project is used to host a website in which users can quickly create drafts for deep learning models and have the equivalent plug-and-play code output immediately.
 
-The code output to the user is written in python and utilises [PyTorch](https://pytorch.org/).
+The code output to the user is written in python and utilises [PyTorch](https://pytorch.org/). In the future I will implement the option to utilize other libraries as well.
 
 - [Overview](#overview)
-	- [How I use these diagrams](#how-i-use-these-diagrams)
 - [User guide](#user-guide)
+	- [How I use these diagrams](#how-i-use-these-diagrams)
 	- [Building new models](#building-new-models)
-	- [Editing parameters](#editing-parameters)
-	- [Sharing](#sharing)
+		- [Adding flowpoints](#adding-flowpoints)
+		- [Adding and removing connections](#adding-and-removing-connections)
+		- [Changing the parameters of your model](#changing-the-parameters-of-your-model)
+	- [Changing appearance](#changing-appearance)
+	- [Extracting the model code](#extracting-the-model-code)
+	- [Sharing your model](#sharing-your-model)
+- [Example output](#example-output)
 - [Contributing to this project](#contributing-to-this-project)
-- [About](#about)
-	- [Background](#background)
-	- [Pure JSX flowcharting spin-off](#pure-jsx-flowcharting-spin-off)
 - [Dependencies](#dependencies)
 - [License](#license)
+
+## User guide
+
+Or maybe just play around with it yourself?
 
 ### How I use these diagrams
 1. Start by adding an input block and edit it's parameters to get the correct number of dimensions and features.
@@ -30,31 +38,315 @@ The code output to the user is written in python and utilises [PyTorch](https://
 6. Copy code, plug it into existing pipeline, lean back, and watch the magic.
 
 
-## User guide
-Or maybe just play around with it yourself? Should be fairly easy to get the hang of it!
-
 ### Building new models
-In the lower right corner of the [website](https://mariusbrataas.github.io/flowpoints_ml/) there are three buttons. These can be used to add new flowpoints (blocks) to the model, show/hide code, and copy all code to clipboard.
 
-To build a new model just click the blue + button. This will add a flowpoint. If this is the first flowpoint in the diagram it's type will automatically be set to "input". This flowpoint is not responsible for performing any calculations, but helps determine what input parameters the model's "forward"-function should expect.
+#### Adding flowpoints
+In the lower left corner of the [website](https://mariusbrataas.github.io/flowpoints_ml/) there are four buttons. These can be used to add new flowpoints (blocks) to the model, copy code to clipboard, generate a link to the current model, and hide/show sidebar.
 
-Click the + button again, and a new flowpoint shows up. On each side of a flowpoint there are connection points marked by a ">" ("x" if the flowpoint is an input). A flowpoint can have as many inputs or outputs as you want. Click the output of the first flowpoint to the input of the second flowpoint to connect them.
+To build a new model start by clicking the blue + button. This will add a Flowpoint.
 
-Inside the flowpoint - at the top right - there's a dropdown button. Click this to access and modify more of the flowpoint's settings.
-
-Here's an [example](https://mariusbrataas.github.io/flowpoints_ml/?p=load?0&x&i&2&0,0&1,64_2&fc1&0&1&44,0&1,64,32_1&act1&40&3&44,12&_3&fc2&0&4&88,0&1,32,10_4&act2&36&&88,12&) for you!
-
-The green <> button can be used to show or hide the code for the current model. This code is updated live as you edit the model (I find that kind of satisfying to watch). The syntax highlighting here relies on [this awesome project](https://github.com/conorhastings/react-syntax-highlighter).
-
-### Editing parameters
-When clicking the dropdown button inside a flowpoint all it's parameters will be revealed. Some of these are set automatically to match the dimensions of the input, but most of these parameters can be edited freely. Please note that the parser for the code __does not check whether given parameters are valid__. It only ensures that the data type is correct.
-
-### Sharing
-Sharing of models can be accomplished by simply sharing the url of the document you're working on. I don't have a proper server, and thus no storage space. To make it possible to share models I've had javascript continuously update the url with a link that contains a somewhat dense text representation of the entire model.
-
-When a user tries to open a link to a model this string representation is passed as a query which a piece of javascript then uses to rebuild the model locally in the user's browser.
+Click the + button a few more times to add more points. These will automatically connect if you don't click anywhere else on the screen.
 
 
+#### Adding and removing connections
+To connect one Flowpoint to another, start by clicking on the first point. Then hold shift while clicking the second point. The points should now be connected. To disconnect the two simply repeat this process.
+
+#### Changing the parameters of your model
+Each flowpoint represents one operation in your model. To edit a Flowpoint's function and parameters, click the "Flowpoint"-tab in the sidebar (if the sidebar is not showing click the menu-button in the bottom left of your screen).
+
+The top field in the sidebar allow you to change the operation of the selected flowpoint. Simply click it to display a list of all available operations.
+
+In the second field you can enter a name for your flowpoint. If you don't type a name your flowpoint will be named p_1, p_2, p_3, etc.. in the output python code.
+
+In the parameters area all the available parameters of the flowpoint can be viewed, and most of them can be changed. The "in_features" field will automatically be set to a valid size.
+
+
+### Changing appearance
+In the "Settings"-tab you can change the appearance of your diagrams. Theme and variant changes the look of your flowpoints, while the switches change the background and what information your flowpoints should display.
+
+
+### Extracting the model code
+If you click the "Code"-tab you'll see all the code for your model. The easiest way to copy this code to your clipboard is by clicking the "copy"-button, just beneath the + button.
+
+
+### Sharing your model
+To share your model, simply click the "link"-button. This will generate a link which will get copied to your clipboard.
+
+## Example output
+The following code was generated for [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=d4x9vay0916zbkg)
+
+![](public/sample_output_pic.png)
+
+```python
+'''
+Created with https://mariusbrataas.github.io/flowpoints_ml/
+
+Link to model:
+https://mariusbrataas.github.io/flowpoints_ml/?p=d4x9vay0916zbkg
+
+LICENSE:
+https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE
+'''
+
+
+# Importing torch tools
+import torch
+from torch import nn, optim, cuda
+
+
+# Importing other libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+
+
+# Model
+class neural_net(nn.Module):
+
+
+    def __init__(self, optimizer=optim.SGD, alpha=0.01, criterion=nn.CrossEntropyLoss(), use_cuda=None):
+
+        # Basics
+        super(neural_net, self).__init__()
+
+        # Settings
+        self.optim_type = optimizer
+        self.optimizer  = None
+        self.alpha      = alpha
+        self.criterion  = criterion
+
+        # Use CUDA?
+        self.use_cuda = use_cuda if (use_cuda != None and cuda.is_available()) else cuda.is_available()
+
+        # Current loss and loss history
+        self.train_loss      = 0
+        self.valid_loss      = 0
+        self.train_loss_hist = []
+        self.valid_loss_hist = []
+
+        # State
+        self.state = None
+
+        # Adding all modules
+        self.fc1 = nn.Linear(
+            in_features  = 10,
+            out_features = 96,
+            bias         = True,
+        )
+        self.do1 = nn.Dropout(
+            p       = 0.25,
+            inplace = False,
+        )
+        self.act1 = nn.ReLU(
+            inplace = False,
+        )
+        self.fc2 = nn.Linear(
+            in_features  = 96,
+            out_features = 96,
+            bias         = True,
+        )
+        self.do2 = nn.Dropout(
+            p       = 0.25,
+            inplace = False,
+        )
+        self.act2 = nn.ReLU(
+            inplace = False,
+        )
+        self.fc3 = nn.Linear(
+            in_features  = 96,
+            out_features = 5,
+            bias         = True,
+        )
+        self.do3 = nn.Dropout(
+            p       = 0.25,
+            inplace = False,
+        )
+        self.act3 = nn.Sigmoid()
+
+        # Running startup routines
+        self.startup_routines()
+
+
+    def startup_routines(self):
+        self.optimizer = self.optim_type(self.parameters(), lr=self.alpha)
+        if self.use_cuda:
+            self.cuda()
+
+
+    def predict(self, x):
+        
+        # Switching off auto-grad
+        with torch.no_grad():
+            
+            # Use CUDA?
+            if self.use_cuda:
+                x = x.cuda()
+            
+            # Running inference
+            return self.forward(x)
+
+
+    def forward(self, in_data):
+        in_data = self.fc1(in_data)     # Linear
+        in_data = self.do1(in_data)     # Dropout
+        in_data = self.act1(in_data)    # ReLU
+        in_data = self.fc2(in_data)     # Linear
+        in_data = self.do2(in_data)     # Dropout
+        in_data = self.act2(in_data)    # ReLU
+        in_data = self.fc3(in_data)     # Linear
+        in_data = self.do3(in_data)     # Dropout
+        self.state = self.act3(in_data) # Sigmoid
+        return self.state
+
+
+    def fit_step(self, train_loader):
+
+        # Preparations for fit step
+        self.train_loss = 0 # Resetting training loss
+        self.train()        # Switching to autograd
+
+        # Looping through data
+        for x, y in train_loader:
+
+            # Use CUDA?
+            if self.use_cuda:
+                x, y = x.cuda(), y.cuda()        # Moving tensors to GPU
+
+            # Performing calculations
+            self.forward(x)                      # Forward pass
+            loss = self.criterion(self.state, y) # Calculating loss
+            self.train_loss += loss.item()       # Adding to epoch loss
+            loss.backward()                      # Backward pass
+            self.optimizer.step()                # Optimizing weights
+            self.optimizer.zero_grad()           # Clearing gradients
+
+        # Adding loss to history
+        self.train_loss_hist.append(self.train_loss / len(train_loader))
+
+
+    def validation_step(self, validation_loader):
+
+        # Preparations for validation step
+        self.valid_loss = 0 # Resetting validation loss
+
+        # Swithing off autograd
+        with torch.no_grad():
+
+            # Looping through data
+            for x, y in validation_loader:
+
+                # Use CUDA?
+                if self.use_cuda:
+                    x, y = x.cuda(), y.cuda()        # Moving tensors to GPU
+
+                # Performing calculations
+                self.forward(x)                      # Forward pass
+                loss = self.criterion(self.state, y) # Calculating loss
+                self.valid_loss += loss.item()       # Adding to epoch loss
+
+        # Adding loss to history
+        self.valid_loss_hist.append(self.valid_loss / len(validation_loader))
+
+
+    def fit(self, train_loader, validation_loader=None, epochs=10, show_progress=True, save_best=False):
+
+        # Helpers
+
+        best_validation = 1e5
+
+        # Possibly prepping progress message
+        if show_progress:
+            epoch_l = max(len(str(epochs)), 2)
+            print('Training model...')
+            print('%sEpoch   Training loss   Validation loss   Duration' % ''.rjust(2 * epoch_l - 4, ' '))
+            t = time.time()
+
+        # Looping through epochs
+        for epoch in range(epochs):
+            self.fit_step(train_loader)                 # Optimizing weights
+            if validation_loader != None:               # Perform validation?
+                self.validation_step(validation_loader) # Calculating validation loss
+
+            # Possibly printing progress
+            if show_progress:
+                print('%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' ')),
+                    '| %s' % str(round(self.train_loss_hist[-1], 8)).ljust(13, ' '),
+                    '| %s' % str(round(self.valid_loss_hist[-1], 8)).ljust(15, ' '),
+                    '| %ss' % str(round(time.time() - t, 3)).rjust(7, ' '))
+                t = time.time()
+
+            # Possibly saving model
+
+            if save_best:
+                if self.valid_loss_hist[-1] > best_validation:
+                    self.save('best_validation')
+                    best_validation = self.valid_loss_hist[-1]
+
+
+    def plot_hist(self):
+
+        # Adding plots
+        plt.plot(self.train_loss_hist, color='blue', label='Training loss')
+        plt.plot(self.valid_loss_hist, color='springgreen', label='Validation loss')
+
+        # Axis labels
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend(loc='upper right')
+
+        # Displaying plot
+        plt.show()
+
+
+    def save(self, name='model.pth'):
+        if not '.pth' in name: name += '.pth'
+        torch.save({
+            'fc1': self.fc1,
+            'do1': self.do1,
+            'act1': self.act1,
+            'fc2': self.fc2,
+            'do2': self.do2,
+            'act2': self.act2,
+            'fc3': self.fc3,
+            'do3': self.do3,
+            'act3': self.act3,
+            'train_loss':      self.train_loss,
+            'valid_loss':      self.valid_loss,
+            'train_loss_hist': self.train_loss_hist,
+            'valid_loss_hist': self.valid_loss_hist,
+            'optim_type':      self.optim_type,
+            'alpha':           self.alpha,
+            'criterion':       self.criterion,
+            'use_cuda':        self.use_cuda
+        }, name)
+
+
+    @staticmethod
+    def load(name='model.pth'):
+        if not '.pth' in name: name += '.pth'
+        checkpoint = torch.load(name)
+        model = neural_net(
+            optimizer = checkpoint['optim_type'],
+            alpha     = checkpoint['alpha'],
+            criterion = checkpoint['criterion'],
+            use_cuda  = checkpoint['use_cuda']
+        )
+        model.fc1 = checkpoint['fc1']
+        model.do1 = checkpoint['do1']
+        model.act1 = checkpoint['act1']
+        model.fc2 = checkpoint['fc2']
+        model.do2 = checkpoint['do2']
+        model.act2 = checkpoint['act2']
+        model.fc3 = checkpoint['fc3']
+        model.do3 = checkpoint['do3']
+        model.act3 = checkpoint['act3']
+        model.train_loss      = checkpoint['train_loss']
+        model.valid_loss      = checkpoint['valid_loss']
+        model.train_loss_hist = checkpoint['train_loss_hist']
+        model.valid_loss_hist = checkpoint['valid_loss_hist']
+        model.startup_routines()
+        return model
+```
 
 ## Contributing to this project
 I'd love some help maintaining this project or adding more and better functionality!
@@ -82,87 +374,46 @@ flowpoints_ml
 ├── README.md
 │
 ├── public
+│   ├── favicon.ico
 │   ├── index.html
 │   └── manifest.json
 │
 └── src
-   ├── App.css
-   ├── App.js
-   ├── App.test.js
-   ├── index.css
-   ├── index.js
-   ├── serviceWorker.js
-   │
-   ├── flowparser
-   │   ├── Codepaper.js
-   │   ├── CommonTools.js
-   │   ├── Constructor.js
-   │   ├── Fit.js
-   │   ├── FlowOrder.js
-   │   ├── FlowParser.js
-   │   ├── FlowStateNames.js
-   │   ├── Forward.js
-   │   ├── Initials.js
-   │   ├── PlotHist.js
-   │   ├── SaveLoad.js
-   │   └── Step.js
-   │
-   ├── flowpoint
-   │   ├── DrawPoints.js
-   │   ├── Flowpoint.js
-   │   └── FlowpointSettings.js
-   │
-   └── helpers
-       ├── AppBottom.js
-       ├── DrawConnections.js
-       └── TopBar.js
+    ├── App.css
+    ├── App.js
+    ├── DBhandler.js
+    ├── index.css
+    ├── index.js
+    ├── serviceWorker.js
+    ├── URLparser.js
+    │
+    ├── libraries
+    │   └── pytorch.js
+    │
+    └── sidebar
+        ├── FlowOrder.js
+        ├── Sidebar.css
+        ├── Sidebar.js
+        ├── TabContainer.js
+        └── parsers
+            ├── Parsers.js
+            └── pytorch
+                └── PyTorchParser.js
 ```
-
-
-
-## About
-### Background
-As sort of a weekend-project I built this for myself to use, but figured others might find it useful as well.
-
-Disclaimer: Needed more than a weekend.
-
-Whenever I create machine learning models I try to break up the model to it's individual parts, and then visualise how these nodes connect to each other and how information change shape along the way to allow for new representations.
-
-Very easy to to in one's head. Not as easy to explain. Other ML-geeks usually get it when I point to code or math, but people without the same background tend to have a harder time understanding this magic when they ask to take a peek under the hood.
-
-Often I would just - with a high level of abstraction in every way - draw the diagrams I imagine and explain those. These are usually way easier to understand than code and math.
-
-That's the first reason I built this.
-
-The second reason would be that this makes it very easy for me to quickly build new models and share them with others. Instead of writing a lot of similar code or rewriting existing code I just edit blocks in a diagram.
-
-The third reason (which I only realised after using this for a while) is that this makes version control a whole lot easier. In a project folder I maintain a text file which holds links for all the models I've tried in that project. That turned out to be way easier than maintaining a folder with files for every model, or a single huge file which contains all of them.
-
-### Pure JSX flowcharting spin-off
-More like some kind of spin-off-inception.
-
-In the beginning of building this I figured I'd just use some flowchart-diagramming-plotting-library, but I was amazed to find that the few libraries out there were either difficult to use, required loads of dependencies, did not run properly, poorly styled, or I had to pay to use them.
-
-Thus I built my own little system to suit my requirements. The first draft for the flowchart (not the code parser, that took some tinkering) was finished in only a couple of hours, relying only on SVG paths and html draggables.
-
-I then realised I had almost built a general flowcharting library :D\
-So pretty soon I'll upload such a library (naming it flowpoints) and tweaking this one (flowpoints ml) to utilise that new library instead of keeping it's own not-so-generaly-applicable code.
-
-Updates on this coming soon. Would love some help making that the best flowcharting library available!
-
 
 
 ## Dependencies
 Current dependencies in this project are:
 
+- [Flowpoints](https://github.com/mariusbrataas/flowpoints)
 - [Material UI](https://material-ui.com/)
 - [React JS](https://reactjs.org/)
 - [react-copy-to-clipboard](https://github.com/nkbt/react-copy-to-clipboard)
-- [react-draggable](https://github.com/mzabriskie/react-draggable)
+- [Axios](https://github.com/axios/axios)
 - [react-icons](https://github.com/react-icons/react-icons)
 - [react-syntax-highlighter](https://github.com/conorhastings/react-syntax-highlighter)
 
 
 
 ## License
-These tools are open sourced software, [licensed as MIT](https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE)
+[MIT](https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE)

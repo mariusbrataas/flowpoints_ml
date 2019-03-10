@@ -1,18 +1,22 @@
 {
-  "name": "app",
+  "name": "flowpoints_ml",
+  "homepage": "http://mariusbrataas.github.io/flowpoints_ml",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://mariusbrataas.github.io/flowpoints_ml",
   "dependencies": {
-    "@material-ui/core": "^3.7.0",
-    "@material-ui/icons": "^3.0.1",
-    "react": "^16.7.0",
-    "react-copy-to-clipboard": "^5.0.1",
-    "react-dom": "^16.7.0",
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
+    "axios": "^0.18.0",
+    "copy-to-clipboard": "^3.0.8",
+    "flowpoints": "^1.0.13",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-request": "^3.1.2",
     "react-scripts": "2.1.3",
-    "react-draggable": "^3.0.5",
-    "react-icons": "^3.2.2",
-    "react-syntax-highlighter": "^10.1.2"
+    "react-select": "^2.4.0",
+    "react-syntax-highlighter": "^10.1.3",
+    "request": "^2.88.0",
+    "serve": "^10.1.2"
   },
   "scripts": {
     "start": "react-scripts start",

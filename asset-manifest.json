@@ -1,13 +1,13 @@
 {
-  "main.css": "/flowpoints_ml/static/css/main.1b65c7f4.chunk.css",
-  "main.js": "/flowpoints_ml/static/js/main.fe90f5e8.chunk.js",
-  "main.js.map": "/flowpoints_ml/static/js/main.fe90f5e8.chunk.js.map",
-  "static/js/1.ca2ec3fe.chunk.js": "/flowpoints_ml/static/js/1.ca2ec3fe.chunk.js",
-  "static/js/1.ca2ec3fe.chunk.js.map": "/flowpoints_ml/static/js/1.ca2ec3fe.chunk.js.map",
+  "main.css": "/flowpoints_ml/static/css/main.056d9c10.chunk.css",
+  "main.js": "/flowpoints_ml/static/js/main.88e02b61.chunk.js",
+  "main.js.map": "/flowpoints_ml/static/js/main.88e02b61.chunk.js.map",
+  "static/js/1.b3abdabf.chunk.js": "/flowpoints_ml/static/js/1.b3abdabf.chunk.js",
+  "static/js/1.b3abdabf.chunk.js.map": "/flowpoints_ml/static/js/1.b3abdabf.chunk.js.map",
   "runtime~main.js": "/flowpoints_ml/static/js/runtime~main.7c0425a9.js",
   "runtime~main.js.map": "/flowpoints_ml/static/js/runtime~main.7c0425a9.js.map",
-  "static/css/main.1b65c7f4.chunk.css.map": "/flowpoints_ml/static/css/main.1b65c7f4.chunk.css.map",
+  "static/css/main.056d9c10.chunk.css.map": "/flowpoints_ml/static/css/main.056d9c10.chunk.css.map",
   "index.html": "/flowpoints_ml/index.html",
-  "precache-manifest.039cef30783b770e368bad84ca44a552.js": "/flowpoints_ml/precache-manifest.039cef30783b770e368bad84ca44a552.js",
+  "precache-manifest.ed8b11dc4355438f98efeb128cd55b81.js": "/flowpoints_ml/precache-manifest.ed8b11dc4355438f98efeb128cd55b81.js",
   "service-worker.js": "/flowpoints_ml/service-worker.js"
 }

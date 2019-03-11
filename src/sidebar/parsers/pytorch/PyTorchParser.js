@@ -218,7 +218,7 @@ function Fit() {
   msg += '\n        if show_progress:'
   msg += '\n            epoch_l = max(len(str(epochs)), 2)'
   msg += "\n            print('Training model...')"
-  msg += "\n            print('%sEpoch   Training loss   Validation loss   Duration' % ''.rjust(2 * epoch_l - 4, ' '))"
+  msg += "\n            print('%sEpoch   Training loss   Validation loss   Duration   Time remaining' % ''.rjust(2 * epoch_l - 4, ' '))"
   msg += '\n            t = time.time()'
   msg += '\n\n        # Looping through epochs'
   msg += '\n        for epoch in range(epochs):'
@@ -227,16 +227,21 @@ function Fit() {
   msg += '\n                self.validation_step(validation_loader) # Calculating validation loss'
   msg += '\n\n            # Possibly printing progress'
   msg += '\n            if show_progress:'
+  msg += '\n                eta_s = (time.time() - t) * (epochs - epoch)'
+  msg += "\n                eta = '%sm %ss' % (round(eta_s / 60), 60 - round(eta_s % 60))"
   msg += "\n                print('%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' ')),"
   msg += "\n                    '| %s' % str(round(self.train_loss_hist[-1], 8)).ljust(13, ' '),"
   msg += "\n                    '| %s' % str(round(self.valid_loss_hist[-1], 8)).ljust(15, ' '),"
-  msg += "\n                    '| %ss' % str(round(time.time() - t, 3)).rjust(7, ' '))"
+  msg += "\n                    '| %ss' % str(round(time.time() - t, 3)).rjust(7, ' '),"
+  msg += "\n                    '| %s' % eta.ljust(14, ' '))"
   msg += '\n                t = time.time()'
   msg += '\n\n            # Possibly saving model'
-  msg += '\n\n            if save_best:'
-  msg += '\n                if self.valid_loss_hist[-1] > best_validation:'
+  msg += '\n            if save_best:'
+  msg += '\n                if self.valid_loss_hist[-1] < best_validation:'
   msg += "\n                    self.save('best_validation')"
   msg += "\n                    best_validation = self.valid_loss_hist[-1]"
+  msg += '\n\n        # Switching to eval'
+  msg += '\n        self.eval()'
 
   // Returning
   return msg

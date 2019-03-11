@@ -104,6 +104,14 @@ class App extends Component {
 
 
   componentDidMount() {
+
+    // Creating alert on closing window
+    window.onbeforeunload = e => {
+      if (this.state.count > 0) return 'Any unsaved data will be lost';
+      return null
+    }
+
+    // Query?
     var query = window.location.href.split(this.baseUrl)[1]
 
     if (query.includes('p=')) {

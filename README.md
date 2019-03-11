@@ -7,7 +7,7 @@ Create deep learning models without all the typing and dimension mismatches! Fol
 [This npm package](https://www.npmjs.com/package/flowpoints) is a spin-off of this project, which this project is now utilizing.
 
 Here's a [colab](https://colab.research.google.com/drive/15zC7TMheMzwllEShgN45Y7JLXtS-syMn) using [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=9fehu18ra4tyon6)
-![](//public/cifar10net.png)
+![](public/cifar10net.png)
 
 ## Overview
 This project is used to host a website in which users can quickly create drafts for deep learning models and have the equivalent plug-and-play code output immediately.

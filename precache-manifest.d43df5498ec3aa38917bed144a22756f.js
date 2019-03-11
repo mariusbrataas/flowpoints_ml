@@ -4,19 +4,19 @@ self.__precacheManifest = [
     "url": "/flowpoints_ml/static/js/runtime~main.7c0425a9.js"
   },
   {
-    "revision": "ac356d81ec72194c2135",
-    "url": "/flowpoints_ml/static/js/main.ac356d81.chunk.js"
+    "revision": "f68485bea7f9727d850f",
+    "url": "/flowpoints_ml/static/js/main.f68485be.chunk.js"
   },
   {
     "revision": "22b31691d85a8a177203",
     "url": "/flowpoints_ml/static/js/1.22b31691.chunk.js"
   },
   {
-    "revision": "ac356d81ec72194c2135",
+    "revision": "f68485bea7f9727d850f",
     "url": "/flowpoints_ml/static/css/main.4c60a59d.chunk.css"
   },
   {
-    "revision": "82c5be9417fa8d619abafc99c6cb5787",
+    "revision": "96db780d0dfcb81302da59261b6f7bd2",
     "url": "/flowpoints_ml/index.html"
   }
 ];

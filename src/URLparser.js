@@ -38,13 +38,22 @@ export const themes = [
   'white'
 ]
 
-const lvls = {
-  0: 'IIA',
-  1: 'IIB',
-  2: 'IIC',
-  3: 'IID'
-}
+// mais+og-fisk_og.ost,og(korn)
 
+const lvls = {
+  0: '$',
+  1: '(',
+  2: ')',
+  3: '-'
+}
+/*
+const lvls = {
+  0: '.',
+  1: ',',
+  2: '-',
+  3: '_'
+}
+*/
 function num2string(num) {
   return num.toString(36)
 }

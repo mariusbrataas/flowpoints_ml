@@ -66,7 +66,7 @@ class App extends Component {
       settings:{
         tab: 'Misc',
         theme: 'indigo',
-        background: 'black',
+        background: 'white',
         variant:'outlined',
         drawerWidth: 350,
         darktheme: true,
@@ -108,7 +108,6 @@ class App extends Component {
     // Creating alert on closing window
     window.onbeforeunload = e => {
       if (this.state.count > 0) return 'Any unsaved data will be lost';
-      return null
     }
 
     // Query?

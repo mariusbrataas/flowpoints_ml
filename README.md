@@ -1,6 +1,6 @@
 ![](public/Imagine.png)
 
-# Flowpoints ML
+# Flowpoints ML (updates coming soon!!)
 
 Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)
 

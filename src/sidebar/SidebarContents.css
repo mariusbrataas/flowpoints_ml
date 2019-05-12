@@ -1,0 +1,5 @@
+.sidebarContents {
+  min-height: 0;
+  overflow: auto;
+  flex-grow: 1;
+}

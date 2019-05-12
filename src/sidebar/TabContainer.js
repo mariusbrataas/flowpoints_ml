@@ -6,9 +6,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+
+// Styling
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 0,
     overflow:'scroll',
   },
   tabsRoot: {
@@ -51,6 +53,8 @@ const styles = theme => ({
   },
 });
 
+
+// Main class
 class TabContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -93,8 +97,10 @@ class TabContainer extends React.Component {
   }
 }
 
+// Setting proptypes
 TabContainer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+// Exporting
 export default withStyles(styles)(TabContainer);

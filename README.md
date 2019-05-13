@@ -1,18 +1,24 @@
-![](public/Imagine.png)
+![](public/imagine_deep_learning.png)
 
-# Flowpoints ML (updates coming soon!!)
+
+# Flowpoints
 
 Create deep learning models without all the typing and dimension mismatches! Follow [this link](https://mariusbrataas.github.io/flowpoints_ml) to play around with this on your own :)
 
 [This npm package](https://www.npmjs.com/package/flowpoints) is a spin-off of this project, which this project is now utilizing.
 
-Here's a [colab](https://colab.research.google.com/drive/15zC7TMheMzwllEShgN45Y7JLXtS-syMn) using [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=9fehu18ra4tyon6)
+Here's a [colab](https://colab.research.google.com/drive/15zC7TMheMzwllEShgN45Y7JLXtS-syMn) using this PyTorch [model.](https://mariusbrataas.github.io/flowpoints_ml/?p=9fehu18ra4ty)
+
 ![](public/cifar10net.png)
+
+And here's similar [colab](https://colab.research.google.com/drive/1rkJItfTb8fB0mWQRmL-shsiReFLJ57vR) using this TensorFlow [model](https://mariusbrataas.github.io/flowpoints_ml/?p=KlHpdLzP3SDx)
+
+![](public/tf_cifar10.png)
 
 ## Overview
 This project is used to host a website in which users can quickly create drafts for deep learning models and have the equivalent plug-and-play code output immediately.
 
-The code output to the user is written in python and utilizes [PyTorch](https://pytorch.org/). In the future I will implement the option to utilize other libraries as well.
+The code output to the user is written in python and utilizes [PyTorch](https://pytorch.org/) and [TensorFlow](https://www.tensorflow.org/alpha).
 
 - [Overview](#overview)
 - [User guide](#user-guide)
@@ -35,7 +41,7 @@ Or maybe just play around with it yourself?
 
 ### How I use these diagrams
 1. Start by adding an input block and edit it's parameters to get the correct number of dimensions and features.
-2. Add a bunch of blocks, organise them a little bit and add all connections.
+2. Add a bunch of blocks, organize them a little bit and add all connections.
 3. Start from the top and move downstream, editing block parameters to ensure their outputs match the desired dimensions.
 4. Add names to all blocks (if needed).
 5. Quickly review code.
@@ -45,7 +51,7 @@ Or maybe just play around with it yourself?
 ### Building new models
 
 #### Adding flowpoints
-In the lower left corner of the [website](https://mariusbrataas.github.io/flowpoints_ml/) there are four buttons. These can be used to add new flowpoints (blocks) to the model, copy code to clipboard, generate a link to the current model, and hide/show sidebar.
+In the lower left corner of the [website](https://mariusbrataas.github.io/flowpoints_ml/) there are five buttons. These can be used to add new flowpoints (blocks) to the model, copy code to clipboard, generate a link to the current model, hide/show sidebar, and display a dialog to help users get started.
 
 To build a new model start by clicking the blue + button. This will add a Flowpoint.
 
@@ -77,23 +83,119 @@ If you click the "Code"-tab you'll see all the code for your model. The easiest 
 To share your model, simply click the "link"-button. This will generate a link which will get copied to your clipboard.
 
 ## Example output
-The following code was generated for [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=d4x9vay0916zbkg)
+The following code was generated for [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3)
 
 ![](public/sample_output_pic.png)
 
+
+In TensorFlow:
+
 ```python
 '''
-Created with https://mariusbrataas.github.io/flowpoints_ml/
+Created using flowpoints.io
 
 Link to model:
-https://mariusbrataas.github.io/flowpoints_ml/?p=d4x9vay0916zbkg
+https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3
 
 LICENSE:
 https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE
 '''
 
 
-# Importing torch tools
+# Importing TensorFlow tools
+import tensorflow as tf
+
+
+# Model
+def NeuralNet(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy']):
+
+    # Initializing inputs
+    in_data = tf.keras.layers.Input((1,10,), name='in_data')
+
+    # Initializing layers
+    fc1 = tf.keras.layers.Dense(
+        name               = "fc1",
+        units              = 96,
+        use_bias           = True,
+        kernel_initializer = "glorot_uniform",
+        bias_initializer   = "zeros",
+    )(in_data)
+    do1 = tf.keras.layers.Dropout(
+        name = "do1",
+        rate = 1,
+    )(fc1)
+    act1 = tf.keras.layers.ReLU(
+        name           = "act1",
+        negative_slope = 0,
+        threshold      = 0,
+    )(do1)
+    fc2 = tf.keras.layers.Dense(
+        name               = "fc2",
+        units              = 96,
+        use_bias           = True,
+        kernel_initializer = "glorot_uniform",
+        bias_initializer   = "zeros",
+    )(act1)
+    do2 = tf.keras.layers.Dropout(
+        name = "do2",
+        rate = 1,
+    )(fc2)
+    act2 = tf.keras.layers.ReLU(
+        name           = "act2",
+        negative_slope = 0,
+        threshold      = 0,
+    )(do2)
+    fc3 = tf.keras.layers.Dense(
+        name               = "fc3",
+        units              = 5,
+        use_bias           = True,
+        kernel_initializer = "glorot_uniform",
+        bias_initializer   = "zeros",
+    )(act2)
+    do3 = tf.keras.layers.Dropout(
+        name = "do3",
+        rate = 1,
+    )(fc3)
+
+COULD NOT ADD act3 (Sigmoid)!
+The layertype is not available in the the currently selected librar.
+
+
+
+    # Creating model
+    _model = tf.keras.models.Model(
+        inputs  = [in_data],
+        outputs = [act3],
+        name    = 'flowpoints.io/?p=LHhe4I81I1a3'
+    )
+
+    # Compiling model
+    _model.compile(
+        optimizer = optimizer,
+        loss      = loss,
+        metrics   = metrics
+    )
+
+    # Returning model
+    return _model
+```
+
+
+Or similarly, in PyTorch:
+
+```python
+'''
+Created using flowpoints.io
+
+Link to model:
+https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3
+
+LICENSE:
+https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE
+'''
+
+
+# Importing PyTorch tools
 import torch
 from torch import nn, optim, cuda
 
@@ -105,13 +207,13 @@ import time
 
 
 # Model
-class neural_net(nn.Module):
+class NeuralNet(nn.Module):
 
 
     def __init__(self, optimizer=optim.SGD, alpha=0.01, criterion=nn.CrossEntropyLoss(), use_cuda=None):
 
         # Basics
-        super(neural_net, self).__init__()
+        super(NeuralNet, self).__init__()
 
         # Settings
         self.optim_type = optimizer
@@ -128,14 +230,11 @@ class neural_net(nn.Module):
         self.train_loss_hist = []
         self.valid_loss_hist = []
 
-        # State
-        self.state = None
-
-        # Adding all modules
+        # Initializing all layers
         self.fc1 = nn.Linear(
             in_features  = 10,
             out_features = 96,
-            bias         = True,
+            bias         = False,
         )
         self.do1 = nn.Dropout(
             p       = 0.25,
@@ -147,7 +246,7 @@ class neural_net(nn.Module):
         self.fc2 = nn.Linear(
             in_features  = 96,
             out_features = 96,
-            bias         = True,
+            bias         = False,
         )
         self.do2 = nn.Dropout(
             p       = 0.25,
@@ -159,7 +258,7 @@ class neural_net(nn.Module):
         self.fc3 = nn.Linear(
             in_features  = 96,
             out_features = 5,
-            bias         = True,
+            bias         = False,
         )
         self.do3 = nn.Dropout(
             p       = 0.25,
@@ -177,17 +276,17 @@ class neural_net(nn.Module):
             self.cuda()
 
 
-    def predict(self, x):
-        
-        # Switching off auto-grad
+    def predict(self, in_data):
+
+        # Switching off autograd
         with torch.no_grad():
-            
+
             # Use CUDA?
             if self.use_cuda:
-                x = x.cuda()
-            
+                in_data = in_data.cuda()
+
             # Running inference
-            return self.forward(x)
+            return self.forward(in_data)
 
 
     def forward(self, in_data):
@@ -203,29 +302,34 @@ class neural_net(nn.Module):
         return self.state
 
 
-    def fit_step(self, train_loader):
+    def fit_step(self, training_loader):
 
         # Preparations for fit step
         self.train_loss = 0 # Resetting training loss
         self.train()        # Switching to autograd
 
         # Looping through data
-        for x, y in train_loader:
+        for in_data, act3_target in training_loader:
 
             # Use CUDA?
             if self.use_cuda:
-                x, y = x.cuda(), y.cuda()        # Moving tensors to GPU
+                in_data = in_data.cuda()
+                act3_target = act3_target.cuda()
 
-            # Performing calculations
-            self.forward(x)                      # Forward pass
-            loss = self.criterion(self.state, y) # Calculating loss
-            self.train_loss += loss.item()       # Adding to epoch loss
+            # Forward pass
+            self.forward(in_data)
+
+            # Calculating loss
+            loss = self.criterion(self.state, act3_target)
+            self.train_loss += loss.item() # Adding to epoch loss
+
+            # Backward pass and optimization
             loss.backward()                      # Backward pass
             self.optimizer.step()                # Optimizing weights
             self.optimizer.zero_grad()           # Clearing gradients
 
         # Adding loss to history
-        self.train_loss_hist.append(self.train_loss / len(train_loader))
+        self.train_loss_hist.append(self.train_loss / len(training_loader))
 
 
     def validation_step(self, validation_loader):
@@ -233,58 +337,65 @@ class neural_net(nn.Module):
         # Preparations for validation step
         self.valid_loss = 0 # Resetting validation loss
 
-        # Swithing off autograd
+        # Switching off autograd
         with torch.no_grad():
 
             # Looping through data
-            for x, y in validation_loader:
+            for in_data, act3_target in validation_loader:
 
                 # Use CUDA?
                 if self.use_cuda:
-                    x, y = x.cuda(), y.cuda()        # Moving tensors to GPU
+                    in_data = in_data.cuda()
+                    act3_target = act3_target.cuda()
 
-                # Performing calculations
-                self.forward(x)                      # Forward pass
-                loss = self.criterion(self.state, y) # Calculating loss
-                self.valid_loss += loss.item()       # Adding to epoch loss
+                # Forward pass
+                self.forward(in_data)
 
-        # Adding loss to history
-        self.valid_loss_hist.append(self.valid_loss / len(validation_loader))
+                # Calculating loss
+                loss = self.criterion(self.state, act3_target)
+                self.valid_loss += loss.item() # Adding to epoch loss
+
+            # Adding loss to history
+            self.valid_loss_hist.append(self.valid_loss / len(validation_loader))
 
 
-    def fit(self, train_loader, validation_loader=None, epochs=10, show_progress=True, save_best=False):
+    def fit(self, training_loader, validation_loader=None, epochs=10, show_progress=True, save_best=False):
 
         # Helpers
-
         best_validation = 1e5
 
         # Possibly prepping progress message
         if show_progress:
             epoch_l = max(len(str(epochs)), 2)
             print('Training model...')
-            print('%sEpoch   Training loss   Validation loss   Duration' % ''.rjust(2 * epoch_l - 4, ' '))
+            print('%sEpoch   Training loss   Validation loss   Duration   Time remaining' % ''.rjust(2 * epoch_l - 4, ' '))
             t = time.time()
 
         # Looping through epochs
         for epoch in range(epochs):
-            self.fit_step(train_loader)                 # Optimizing weights
-            if validation_loader != None:               # Perform validation?
+            self.fit_step(training_loader) # Optimizing
+            if validation_loader != None:  # Perform validation?
                 self.validation_step(validation_loader) # Calculating validation loss
 
             # Possibly printing progress
             if show_progress:
+                eta_s = (time.time() - t) * (epochs - epoch)
+                eta = '%sm %ss' % (round(eta_s / 60), 60 - round(eta_s % 60))
                 print('%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' ')),
                     '| %s' % str(round(self.train_loss_hist[-1], 8)).ljust(13, ' '),
                     '| %s' % str(round(self.valid_loss_hist[-1], 8)).ljust(15, ' '),
-                    '| %ss' % str(round(time.time() - t, 3)).rjust(7, ' '))
+                    '| %ss' % str(round(time.time() - t, 3)).rjust(7, ' '),
+                    '| %s' % eta.ljust(14, ' '))
                 t = time.time()
 
             # Possibly saving model
-
             if save_best:
-                if self.valid_loss_hist[-1] > best_validation:
+                if self.valid_loss_hist[-1] < best_validation:
                     self.save('best_validation')
                     best_validation = self.valid_loss_hist[-1]
+
+        # Switching to eval
+        self.eval()
 
 
     def plot_hist(self):
@@ -329,7 +440,7 @@ class neural_net(nn.Module):
     def load(name='model.pth'):
         if not '.pth' in name: name += '.pth'
         checkpoint = torch.load(name)
-        model = neural_net(
+        model = NeuralNet(
             optimizer = checkpoint['optim_type'],
             alpha     = checkpoint['alpha'],
             criterion = checkpoint['criterion'],
@@ -361,7 +472,6 @@ As of right now the code is not properly commented, but I'll do that pretty soon
 
 Some ideas I'd like to implement:
 
-- __Support for other ML frameworks__ (Keras, TF...). This can probably be implemented easily in the flowchart-to-code parser (in the src/sidebar/parsers directory).
 - __Pre-processing.__ Maybe something utilizing the [torch data loader](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader), with support for multiple workers and use of [transforms](https://pytorch.org/docs/stable/torchvision/transforms.html).
 - __Better support for mobile.__ Not so great on my phone, kinda ok on my iPad.
 - __Python load model by link??__ Maybe not possible, but would be awesome!
@@ -385,24 +495,42 @@ flowpoints_ml
 └── src
     ├── App.css
     ├── App.js
-    ├── DBhandler.js
+    ├── Cryptographer.js
+    ├── DataBaseHandler.js
+    ├── HelpDialog.js
+    ├── Helpers.js
     ├── index.css
     ├── index.js
+    ├── LibraryParser.js
+    ├── MainButtons.js
+    ├── MainLibrary.js
+    ├── NotificationContainer.js
+    ├── PasswordDialog.js
     ├── serviceWorker.js
-    ├── URLparser.js
     │
     ├── libraries
-    │   └── pytorch.js
+    │   ├── base_library.js
+    │   ├── pytorch_autoparams.js
+    │   ├── pytorch_library.js
+    │   └── tensorflow_library.js
+    │
+    ├── parser
+    │   ├── FlowOrder.js
+    │   ├── Parser.js
+    │   ├── PyTorchParser.js
+    │   └── TensorflowParser.js
     │
     └── sidebar
-        ├── FlowOrder.js
+        ├── CodeTab.js
+        ├── FlowpointTab.js
+        ├── FrontHelpers.css
+        ├── FrontHelpers.js
+        ├── MiscTab.js
         ├── Sidebar.css
         ├── Sidebar.js
-        ├── TabContainer.js
-        └── parsers
-            ├── Parsers.js
-            └── pytorch
-                └── PyTorchParser.js
+        ├── SidebarContents.css
+        ├── SidebarContents.js
+        └── SidebarHead.js
 ```
 
 

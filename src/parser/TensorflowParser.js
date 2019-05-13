@@ -62,6 +62,7 @@ function Constructor(state, order, inps, dummies, indent) {
           if (point.base_ref === 'Concatenate') {
 
             // Adding inputs
+            msg += '\n' + dent(indent, 1) + current_point_name + ' = tf.keras.layers.Concatenate(axis=' + point.concat_dim + ')('
             msg += '\n' + dent(indent, 2) + '['
             inputs.map(inp_key => {
               msg += '\n' + dent(indent, 3) + getPointName(flowpoints, inp_key) + ','
@@ -72,22 +73,45 @@ function Constructor(state, order, inps, dummies, indent) {
 
           } else {
 
-            // Adder name
-            var addname = "'add_"
-            inputs.map(inp_key => addname += getPointName(flowpoints, inp_key) + '_')
-            addname = addname.slice(0, -1) + "'"
+            if (point.concat_inputs) {
 
-            // Creating layer
-            msg += '\n' + dent(indent, 1) + current_point_name + ' = tf.keras.layers.' + content.reference
-            msg += FormatInitParams(parameters, 1, indent)
-            msg += '('
-            msg += '\n' + dent(indent, 2) + "tf.keras.layers.Add(name=" + addname + ")(["
-            inputs.map(inp_key => {
-              msg += '\n' + dent(indent, 3) + getPointName(flowpoints, inp_key) + ','
-            })
-            msg = msg.slice(0, -1)
-            msg += '\n' + dent(indent, 2) + '])'
-            msg += '\n' + dent(indent, 1) + ')'
+              // Concat name
+              var concatname = "'concat_"
+              inputs.map(inp_key => concatname += getPointName(flowpoints, inp_key) + '_')
+              concatname = concatname.slice(0, -1) + "'"
+
+              // Creating layer
+              msg += '\n' + dent(indent, 1) + current_point_name + ' = tf.keras.layers.' + content.reference
+              msg += FormatInitParams(parameters, 1, indent)
+              msg += '('
+              msg += '\n' + dent(indent, 2) + "tf.keras.layers.Concatenate(name=" + concatname + ", axis=" + point.concat_dim + ")(["
+              inputs.map(inp_key => {
+                msg += '\n' + dent(indent, 3) + getPointName(flowpoints, inp_key) + ','
+              })
+              msg = msg.slice(0, -1)
+              msg += '\n' + dent(indent, 2) + '])'
+              msg += '\n' + dent(indent, 1) + ')'
+
+            } else {
+
+              // Adder name
+              var addname = "'add_"
+              inputs.map(inp_key => addname += getPointName(flowpoints, inp_key) + '_')
+              addname = addname.slice(0, -1) + "'"
+
+              // Creating layer
+              msg += '\n' + dent(indent, 1) + current_point_name + ' = tf.keras.layers.' + content.reference
+              msg += FormatInitParams(parameters, 1, indent)
+              msg += '('
+              msg += '\n' + dent(indent, 2) + "tf.keras.layers.Add(name=" + addname + ")(["
+              inputs.map(inp_key => {
+                msg += '\n' + dent(indent, 3) + getPointName(flowpoints, inp_key) + ','
+              })
+              msg = msg.slice(0, -1)
+              msg += '\n' + dent(indent, 2) + '])'
+              msg += '\n' + dent(indent, 1) + ')'
+
+            }
 
           }
 
@@ -102,7 +126,7 @@ function Constructor(state, order, inps, dummies, indent) {
         if (point.is_output) outputs.push(current_point_key)
       } else {
         msg += '\n\nCOULD NOT ADD ' + current_point_name + ' (' + point.base_ref + ')!'
-        msg += '\nThe layertype is not available in the the currently selected librar.\n\n'
+        msg += '\nThe layertype is not available in the the currently selected library.\n\n'
       }
     }
   })

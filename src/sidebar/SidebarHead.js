@@ -14,9 +14,9 @@ export const SidebarHead = props => {
     <div>
 
       <Typography href='http://localhost:3000/' gutterBottom variant="h5" component="h2" style={{padding:'15px'}}>
-      <Link href='http://localhost:3000/' color='inherit' underline='none'>
-      Flowpoints ML
-      </Link>
+        <Link href='http://localhost:3000/' color='inherit' underline='none'>
+          Flowpoints
+        </Link>
       </Typography>
 
       <div style={{position:'absolute', right:5, top:5}}>

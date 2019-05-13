@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { SelectContainer, TextFieldContainer, SwitchContainer, SelectContainerTooltips } from './FrontHelpers';
-import { IconButton, TextField } from '@material-ui/core';
+import { Autosuggest, SelectContainer, TextFieldContainer, SwitchContainer, SelectContainerTooltips } from './FrontHelpers';
+import { IconButton, TextField, MenuItem, Paper, FormControl, Chip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { Tooltip } from '@material-ui/core';
+
 
 
 function fieldChanger(refresh, updateFlowpoints, key, value) {
@@ -327,18 +328,8 @@ const ButtonContainer = props => {
   )
 }
 
-
-const SettingsSection = props => {
-  var settings = props.state.settings;
-  var flowpoints = props.state.flowpoints;
-  var environment = props.state.environment;
-  const point = flowpoints[settings.selected];
-  return (
-    <div>
-
-      <h3 style={{marginTop:0}}>Flowpoint settings</h3>
-
-      <SelectContainerTooltips
+/*
+<SelectContainerTooltips
         label='Layer type'
         value={point.base_ref}
         options={environment.availableLayers}
@@ -359,6 +350,38 @@ const SettingsSection = props => {
           props.updateFlowpoints(flowpoints)
 
         }}/>
+*/
+
+
+const SettingsSection = props => {
+  var settings = props.state.settings;
+  var flowpoints = props.state.flowpoints;
+  var environment = props.state.environment;
+  const point = flowpoints[settings.selected];
+  return (
+    <div>
+
+      <h3 style={{marginTop:0}}>Flowpoint settings</h3>
+
+        <Autosuggest
+          value={point.base_ref}
+          options={environment.availableLayers}
+          onChange={val => {
+
+            // Loading from state
+            var state = props.refresh();
+            var settings = state.settings;
+            var flowpoints = state.flowpoints;
+  
+            // Changing flowpoint layer type
+            var point = flowpoints[settings.selected];
+            point.content = props.getEmptyFlowpointContent(val)
+            point.base_ref = val;
+  
+            // Updating state
+            props.updateFlowpoints(flowpoints)
+  
+          }}/>
 
 
         <div style={{paddingTop:15}}>

@@ -1858,43 +1858,6 @@ export function getTensorFlowLibrary() {
         "max": Infinity
       }
     },
-    "InputLayer": {
-      "input_shape": {
-        "type": null,
-        "value": null,
-        "istuple": true,
-        "min": -Infinity,
-        "max": Infinity
-      },
-      "batch_size": {
-        "type": null,
-        "value": "None",
-        "istuple": false,
-        "min": -Infinity,
-        "max": Infinity
-      },
-      "dtype": {
-        "type": null,
-        "value": "None",
-        "istuple": false,
-        "min": -Infinity,
-        "max": Infinity
-      },
-      "input_tensor": {
-        "type": null,
-        "value": "None",
-        "istuple": false,
-        "min": -Infinity,
-        "max": Infinity
-      },
-      "sparse": {
-        "type": "bool",
-        "value": false,
-        "istuple": false,
-        "min": -Infinity,
-        "max": Infinity
-      }
-    },
     "InputSpec": {
       "dtype": {
         "type": null,

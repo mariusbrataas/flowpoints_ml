@@ -16,6 +16,7 @@
     "react-dom": "^16.8.6",
     "react-icons": "^3.6.1",
     "react-scripts": "3.0.0",
+    "react-select": "^2.4.3",
     "react-syntax-highlighter": "^10.2.1"
   },
   "scripts": {

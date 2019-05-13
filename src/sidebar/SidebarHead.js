@@ -13,8 +13,8 @@ export const SidebarHead = props => {
   return (
     <div>
 
-      <Typography href='http://localhost:3000/' gutterBottom variant="h5" component="h2" style={{padding:'15px'}}>
-        <Link href='http://localhost:3000/' color='inherit' underline='none'>
+      <Typography href='https://mariusbrataas.github.io/flowpoints_ml' gutterBottom variant="h5" component="h2" style={{padding:'15px'}}>
+        <Link href='https://mariusbrataas.github.io/flowpoints_ml' color='inherit' underline='none'>
           Flowpoints
         </Link>
       </Typography>

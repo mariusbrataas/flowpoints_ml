@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Dialog, DialogTitle, DialogContentText, DialogContent, ExpansionPanel, ExpansionPanelSummary, Stepper, StepContent, StepLabel, Step } from "@material-ui/core";
+import { Typography, Dialog, DialogTitle, DialogContentText, DialogContent, ExpansionPanel, ExpansionPanelSummary, Stepper, StepContent, StepLabel, Step, Link } from "@material-ui/core";
 
 
 export class HelpDialog extends React.Component{
@@ -31,7 +31,8 @@ export class HelpDialog extends React.Component{
               Welcome to Flowpoints ML!<br/>
               Here you can design deep learning models graphically.<br/><br/>
               The following few sections will help you get going :)<br/>
-              You can also check out the <a href='https://github.com/mariusbrataas/flowpoints_ml#readme' target='_blank'>documentation</a> for more information.
+              You can also check out the <Link href='https://github.com/mariusbrataas/flowpoints_ml#readme' target='_blank'>documentation</Link> for more information.<br/><br/>
+              Found an bug? Please open a new <Link href="https://github.com/mariusbrataas/flowpoints_ml/issues" target='_blank'>issue</Link>, and feel free to fix it!
             </DialogContentText>
           </DialogContent>
 
@@ -120,6 +121,7 @@ export class HelpDialog extends React.Component{
                   When you click this field, a long list will pop up. These are all
                   the layers available. Small, colored badges indicate what libraries the
                   layer is available in, i.e. TF for TensorFlow, or PT for PyTorch.<br/><br/>
+                  If you start typing the name of a layer, the list will try to suggest a smaller selection of layers.<br/><br/>
                   Ideally, it should be possible to create models utilizing layers that are available
                   in either library, and quickly switch between them by just changing the "Library" field
                   in the "Misc" tab.<br/>

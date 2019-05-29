@@ -83,7 +83,7 @@ If you click the "Code"-tab you'll see all the code for your model. The easiest 
 To share your model, simply click the "link"-button. This will generate a link which will get copied to your clipboard.
 
 ## Example output
-The following code was generated for [this model.](https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3)
+The following code was generated for [this model.](https://mariusbrataas.github.io/flowpoints_ml?p=A4xw9sjChG9B)
 
 ![](public/sample_output_pic.png)
 
@@ -95,7 +95,7 @@ In TensorFlow:
 Created using flowpoints.io
 
 Link to model:
-https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3
+https://mariusbrataas.github.io/flowpoints_ml/?p=A4xw9sjChG9B
 
 LICENSE:
 https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE
@@ -156,17 +156,16 @@ def NeuralNet(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
         name = "do3",
         rate = 1,
     )(fc3)
-
-COULD NOT ADD act3 (Sigmoid)!
-The layertype is not available in the the currently selected librar.
-
-
+    act3 = tf.keras.layers.Softmax(
+        name = "act3",
+        axis = -1,
+    )(do3)
 
     # Creating model
     _model = tf.keras.models.Model(
         inputs  = [in_data],
         outputs = [act3],
-        name    = 'flowpoints.io/?p=LHhe4I81I1a3'
+        name    = 'flowpoints.io/?p=A4xw9sjChG9B'
     )
 
     # Compiling model
@@ -188,7 +187,7 @@ Or similarly, in PyTorch:
 Created using flowpoints.io
 
 Link to model:
-https://mariusbrataas.github.io/flowpoints_ml/?p=LHhe4I81I1a3
+https://mariusbrataas.github.io/flowpoints_ml/?p=A4xw9sjChG9B
 
 LICENSE:
 https://github.com/mariusbrataas/flowpoints_ml/blob/master/LICENSE
@@ -264,7 +263,7 @@ class NeuralNet(nn.Module):
             p       = 0.25,
             inplace = False,
         )
-        self.act3 = nn.Sigmoid()
+        self.act3 = nn.Softmax()
 
         # Running startup routines
         self.startup_routines()
@@ -298,7 +297,7 @@ class NeuralNet(nn.Module):
         in_data = self.act2(in_data)    # ReLU
         in_data = self.fc3(in_data)     # Linear
         in_data = self.do3(in_data)     # Dropout
-        self.state = self.act3(in_data) # Sigmoid
+        self.state = self.act3(in_data) # Softmax
         return self.state
 
 

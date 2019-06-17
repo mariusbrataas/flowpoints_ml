@@ -174,9 +174,6 @@ class App extends Component{
     var availableLayers = {Input: Object.keys(environment.libraryFetchers)};
     Object.keys(environment.baseLib).map(layer_key => {
       availableLayers[layer_key] = Object.keys(environment.baseLib[layer_key])
-      //if (environment.baseLib[layer_key][environment.library]) {
-      //  availableLayers[layer_key] = Object.keys(environment.baseLib[layer_key])
-      //}
     })
 
     // Updating environment
@@ -188,9 +185,9 @@ class App extends Component{
   }
 
 
-  prepOutputShapes() {
+  prepOutputShapes(cb) {
 
-    if (this.state.visual.showShape && this.state.environment.library in this.state.environment.autoparams) {
+    if (this.state.environment.library in this.state.environment.autoparams) {
 
       // Helpers
       const autoparams = this.state.environment.autoparams[this.state.environment.library]();
@@ -214,17 +211,23 @@ class App extends Component{
       // Setting all output-shapes
       order.map(key => {
         if (!visited.includes(key)) {
-          var point = flowpoints[key]
-          var tmp_autoparams = autoparams[point.content[library].reference];
-          if (tmp_autoparams) {
-            var bestInp = null
-            dummies[key].inputs.map(inp_key => {
-              if (visited.includes(inp_key)) bestInp = inp_key
-            })
-            const prevshape = flowpoints[bestInp].output_shape.map(value => 1 * value);
-            point.content[library].parameters = tmp_autoparams.autoparams(prevshape, point.content[library].parameters)
-            point.output_shape = tmp_autoparams.outshape(prevshape, point.content[library].parameters).map(value => parseInt(value))
-            visited.push(key)
+          var point = flowpoints[key];
+          if (point.content[library]) {
+            var tmp_autoparams = autoparams[point.content[library].reference];
+            if (tmp_autoparams) {
+              var bestInp = null
+              dummies[key].inputs.map(inp_key => {
+                if (visited.includes(inp_key)) bestInp = inp_key
+              })
+              if (flowpoints[bestInp]) {
+                const prevshape = flowpoints[bestInp].output_shape.map(value => 1 * value);
+                point.content[library].parameters = tmp_autoparams.autoparams(prevshape, point.content[library].parameters)
+                point.output_shape = tmp_autoparams.outshape(prevshape, point.content[library].parameters).map(value => parseInt(value))
+                visited.push(key)
+              }
+            }
+          } else {
+            point.output_shape = []
           }
         }
       })
@@ -319,6 +322,9 @@ class App extends Component{
       concat_inputs: false,
       concat_dim: 0,
       output_shape: [],
+      contiguous: false,
+      reshape_ndims: 0,
+      reshape_dims: [],
       pos: {
         x: settings.lastPos.x,
         y: settings.lastPos.y + 90
@@ -345,6 +351,8 @@ class App extends Component{
       flowpoints,
       settings
     })
+
+    this.updateCode()
 
   }
 

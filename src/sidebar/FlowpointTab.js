@@ -25,6 +25,116 @@ function fieldChanger_input(refresh, updateFlowpoints, key, value) {
   updateFlowpoints(flowpoints)
 }
 
+function fieldChanger_base(refresh, updateFlowpoints, key, value) {
+  var state = refresh()
+  var environment = state.environment;
+  var flowpoints = state.flowpoints;
+  const selected = state.settings.selected;
+  flowpoints[selected][key] = value;
+  updateFlowpoints(flowpoints)
+}
+
+
+const TransformsSection = props => {
+
+  // Point
+  var point = props.state.flowpoints[props.state.settings.selected]
+
+  // Container for bools
+  var bools = [];
+  var ints = [];
+  var tuples = [];
+
+  // Adding bools
+  bools.push(
+    <SwitchContainer
+      label='contiguous'
+      value={point.contiguous}
+      onChange={val => {
+        fieldChanger_base(
+          props.refresh,
+          props.updateFlowpoints,
+          'contiguous',
+          val
+        )
+      }}/>
+  )
+
+  // Adding ints
+  ints.push(
+    <TextFieldContainer
+      label='Reshape dimensions'
+      value={point.reshape_ndims}
+      type='number'
+      variant='outlined'
+      margin='dense'
+      style={{
+        width: 150,
+        paddingRight: 5
+      }}
+      onChange={val => {
+        fieldChanger_base(
+          props.refresh,
+          props.updateFlowpoints,
+          'reshape_ndims',
+          val
+        )
+        if (val) {
+          var new_dims = [];
+          Array.from(Array(parseInt(val)).keys()).map(idx => {
+            new_dims.push(point.reshape_dims[idx] ? point.reshape_dims[idx] : 0)
+          })
+          fieldChanger_base(
+            props.refresh,
+            props.updateFlowpoints,
+            'reshape_dims',
+            new_dims
+          )
+        }
+      }}/>
+  )
+
+  // Tuples
+  Array.from(Array(parseInt(point.reshape_ndims ? point.reshape_ndims : 0)).keys()).map(idx => {
+    tuples.push(
+      <TextFieldContainer
+        label={'reshape dim ' + idx}
+        value={point.reshape_dims[idx]}
+        type='number'
+        variant='outlined'
+        margin='dense'
+        style={{
+          width: 150,
+          paddingRight: 5
+        }}
+        onChange={val => {
+          var new_value = point.reshape_dims;
+          new_value[idx] = val
+          fieldChanger_base(
+            props.refresh,
+            props.updateFlowpoints,
+            'reshape_dims',
+            new_value
+          )
+        }}/>
+    )
+  })
+
+  // Returning
+  return (
+    <div>
+  
+      <h3 style={{marginTop:30}}>Tensor transforms</h3>
+
+      <div style={{paddingTop:0, marginTop:0, marginLeft:-5, paddingBottom:10}}>{ bools }</div>
+      <div>{ ints }</div>
+      <div>{ tuples }</div>
+
+    </div>
+  )
+
+}
+
 
 const ParametersSection = props => {
 
@@ -48,48 +158,97 @@ const ParametersSection = props => {
 
     // Adding fields
     Object.keys(parameters).map(p_key => {
-      const parameter = parameters[p_key]
-      if (parameter.istuple) {
-        fields.tuple.push(
-          <div style={{paddingTop:15}}><h5 style={{margin:0}}>{p_key}</h5></div>
-        )
-        parameter.value.map((value, idx) => {
-          fields.tuple.push(
-            <TextFieldContainer
-              label={p_key + ' ' + idx}
-              value={value}
-              type='number'
-              variant='outlined'
-              margin='dense'
-              style={{
-                width: 160,
-                paddingRight: 5
-              }}
-              onChange={val => {
-                var new_value = parameter.value;
-                new_value[idx] = val;
-                fieldChanger(
-                  props.refresh,
-                  props.updateFlowpoints,
-                  p_key,
-                  new_value
-                )
-              }}/>
-          )
-        })
-      } else {
 
-        switch(parameter.type) {
-          case 'int':
-            fields.int.push(
+      if (p_key !== 'extras') {
+
+        const parameter = parameters[p_key]
+        if (parameter.istuple) {
+          fields.tuple.push(
+            <div style={{paddingTop:15}}><h5 style={{margin:0}}>{p_key}</h5></div>
+          )
+          parameter.value.map((value, idx) => {
+            fields.tuple.push(
               <TextFieldContainer
-                label={p_key}
-                value={parameter.value}
+                label={p_key + ' ' + idx}
+                value={value}
                 type='number'
                 variant='outlined'
                 margin='dense'
                 style={{
-                  width: 160,
+                  width: 150,
+                  paddingRight: 5
+                }}
+                onChange={val => {
+                  var new_value = parameter.value;
+                  new_value[idx] = val;
+                  fieldChanger(
+                    props.refresh,
+                    props.updateFlowpoints,
+                    p_key,
+                    new_value
+                  )
+                }}/>
+            )
+          })
+        } else {
+
+          switch(parameter.type) {
+            case 'int':
+              fields.int.push(
+                <TextFieldContainer
+                  label={p_key}
+                  value={parameter.value}
+                  type='number'
+                  variant='outlined'
+                  margin='dense'
+                  style={{
+                    width: 150,
+                    paddingRight: 5
+                  }}
+                  onChange={val => {
+                    fieldChanger(
+                      props.refresh,
+                      props.updateFlowpoints,
+                      p_key,
+                      val
+                    )
+                  }}/>
+              )
+              break;
+            
+            case 'float':
+              fields.float.push(
+                <TextFieldContainer
+                  label={p_key}
+                  value={parameter.value}
+                  type='number'
+                  variant='outlined'
+                  margin='dense'
+                  style={{
+                    width: 150,
+                    paddingRight: 5
+                  }}
+                  onChange={val => {
+                    fieldChanger(
+                      props.refresh,
+                      props.updateFlowpoints,
+                      p_key,
+                      val
+                    )
+                  }}/>
+              )
+              break;
+            
+            case 'string':
+            fields.string.push(
+              <TextFieldContainer
+                label={p_key}
+                value={parameter.value}
+                type='text'
+                variant='outlined'
+                margin='dense'
+                style={{
+                  width: 150,
                   paddingRight: 5
                 }}
                 onChange={val => {
@@ -102,32 +261,34 @@ const ParametersSection = props => {
                 }}/>
             )
             break;
-          
-          case 'float':
-            fields.float.push(
-              <TextFieldContainer
-                label={p_key}
-                value={parameter.value}
-                type='number'
-                variant='outlined'
-                margin='dense'
-                style={{
-                  width: 160,
-                  paddingRight: 5
-                }}
-                onChange={val => {
-                  fieldChanger(
-                    props.refresh,
-                    props.updateFlowpoints,
-                    p_key,
-                    val
-                  )
-                }}/>
-            )
+            
+            case 'bool':
+              if (p_key === 'batch_first') {
+                fields.bool.push(
+                  <SwitchContainer
+                    label={p_key}
+                    value={props.state.environment.batch_first}
+                    onChange={val => {}}/>
+                )
+              } else {
+                fields.bool.push(
+                  <SwitchContainer
+                    label={p_key}
+                    value={parameter.value}
+                    onChange={val => {
+                      fieldChanger(
+                        props.refresh,
+                        props.updateFlowpoints,
+                        p_key,
+                        val
+                      )
+                    }}/>
+                )
+              }
             break;
           
-          case 'string':
-          fields.string.push(
+          case null:
+          fields.unknown.push(
             <TextFieldContainer
               label={p_key}
               value={parameter.value}
@@ -135,7 +296,7 @@ const ParametersSection = props => {
               variant='outlined'
               margin='dense'
               style={{
-                width: 160,
+                width: 150,
                 paddingRight: 5
               }}
               onChange={val => {
@@ -148,12 +309,17 @@ const ParametersSection = props => {
               }}/>
           )
           break;
-          
-          case 'bool':
-          fields.bool.push(
-            <SwitchContainer
+            
+          case 'select':
+          fields.select.push(
+            <SelectContainer
               label={p_key}
               value={parameter.value}
+              options={parameter.options}
+              style={{
+                width: 150,
+                paddingRight: 5
+              }}
               onChange={val => {
                 fieldChanger(
                   props.refresh,
@@ -164,54 +330,13 @@ const ParametersSection = props => {
               }}/>
           )
           break;
-        
-        case null:
-        fields.unknown.push(
-          <TextFieldContainer
-            label={p_key}
-            value={parameter.value}
-            type='text'
-            variant='outlined'
-            margin='dense'
-            style={{
-              width: 160,
-              paddingRight: 5
-            }}
-            onChange={val => {
-              fieldChanger(
-                props.refresh,
-                props.updateFlowpoints,
-                p_key,
-                val
-              )
-            }}/>
-        )
-        break;
-          
-        case 'select':
-        fields.select.push(
-          <SelectContainer
-            label={p_key}
-            value={parameter.value}
-            options={parameter.options}
-            style={{
-              width: 160,
-              paddingRight: 5
-            }}
-            onChange={val => {
-              fieldChanger(
-                props.refresh,
-                props.updateFlowpoints,
-                p_key,
-                val
-              )
-            }}/>
-        )
-        break;
+
+          }
 
         }
 
       }
+
     })
   } else {
     var parameters = point.content;
@@ -225,7 +350,7 @@ const ParametersSection = props => {
         variant='outlined'
         margin='dense'
         style={{
-          width: 160,
+          width: 150,
           paddingRight: 5
         }}
         onChange={val => {
@@ -269,7 +394,7 @@ const ParametersSection = props => {
           variant='outlined'
           margin='dense'
           style={{
-            width: 160,
+            width: 150,
             paddingRight: 5
           }}
           onChange={val => {
@@ -464,7 +589,7 @@ const SettingsSection = props => {
               variant='outlined'
               margin='dense'
               style={{
-                width: 160,
+                width: 150,
                 paddingRight: 5
               }}
               onChange={val => {
@@ -524,6 +649,11 @@ export const FlowpointTab = props => {
             </div>
           </div>
       }
+
+      <TransformsSection
+        state={props.state}
+        refresh={props.refresh}
+        updateFlowpoints={props.updateFlowpoints}/>
 
     </div>
   )

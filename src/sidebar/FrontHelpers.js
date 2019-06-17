@@ -148,7 +148,7 @@ export class Autosuggest extends React.Component {
         <TextField
           style={{width:'100%', paddingTop:0, marginTop:0}}
           onClick={() => {this.setState({open:!this.state.open})}}
-          label="Name"
+          label="Layer type"
           value={this.state.msg}
           onChange={e => {this.setState({msg:e.target.value, arrow_idx:0, open:true})}}
           margin="normal"

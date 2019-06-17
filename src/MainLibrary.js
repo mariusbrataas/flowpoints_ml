@@ -22,7 +22,8 @@ export function MainLibrary() {
       encrypted_model: '',
       notes: '',
       order: [],
-      dummies: {}
+      dummies: {},
+      batch_first: true
     },
     visual: {
       darkTheme: false,

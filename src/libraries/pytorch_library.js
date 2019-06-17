@@ -1,6 +1,9 @@
 export function getPyTorchLibrary() {
   return {
     "AdaptiveAvgPool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": 1,
@@ -10,6 +13,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveAvgPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": [
@@ -22,6 +28,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveAvgPool3d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": [
@@ -35,6 +44,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveLogSoftmaxWithLoss": {
+      "extras": {
+        "gothidden": false
+      },
       "in_features": {
         "type": "int",
         "value": 1,
@@ -72,6 +84,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveMaxPool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": 1,
@@ -88,6 +103,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveMaxPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": [
@@ -107,6 +125,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AdaptiveMaxPool3d": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": [
@@ -127,6 +148,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AlphaDropout": {
+      "extras": {
+        "gothidden": false
+      },
       "p": {
         "type": "float",
         "value": 0.5,
@@ -143,6 +167,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AvgPool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": 1,
@@ -180,6 +207,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AvgPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -226,6 +256,9 @@ export function getPyTorchLibrary() {
       }
     },
     "AvgPool3d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -275,6 +308,9 @@ export function getPyTorchLibrary() {
       }
     },
     "BatchNorm1d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -312,6 +348,9 @@ export function getPyTorchLibrary() {
       }
     },
     "BatchNorm2d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -349,6 +388,9 @@ export function getPyTorchLibrary() {
       }
     },
     "BatchNorm3d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -386,6 +428,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Bilinear": {
+      "extras": {
+        "gothidden": false
+      },
       "in1_features": {
         "type": "int",
         "value": 1,
@@ -416,6 +461,9 @@ export function getPyTorchLibrary() {
       }
     },
     "CELU": {
+      "extras": {
+        "gothidden": false
+      },
       "alpha": {
         "type": "float",
         "value": 1.0,
@@ -432,6 +480,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConstantPad1d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": 1,
@@ -441,6 +492,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConstantPad2d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [
@@ -453,6 +507,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConstantPad3d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [
@@ -466,6 +523,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Conv1d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -531,6 +591,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Conv2d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -608,6 +671,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Conv3d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -689,6 +755,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConvTranspose1d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -754,6 +823,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConvTranspose2d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -834,6 +906,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ConvTranspose3d": {
+      "extras": {
+        "gothidden": false
+      },
       "in_channels": {
         "type": "int",
         "value": 1,
@@ -919,6 +994,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Dropout": {
+      "extras": {
+        "gothidden": false
+      },
       "p": {
         "type": "float",
         "value": 0.5,
@@ -935,6 +1013,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Dropout2d": {
+      "extras": {
+        "gothidden": false
+      },
       "p": {
         "type": "float",
         "value": 0.5,
@@ -951,6 +1032,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Dropout3d": {
+      "extras": {
+        "gothidden": false
+      },
       "p": {
         "type": "float",
         "value": 0.5,
@@ -967,6 +1051,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ELU": {
+      "extras": {
+        "gothidden": false
+      },
       "alpha": {
         "type": "float",
         "value": 1.0,
@@ -983,6 +1070,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Embedding": {
+      "extras": {
+        "gothidden": false
+      },
       "num_embeddings": {
         "type": "int",
         "value": 1,
@@ -1034,6 +1124,9 @@ export function getPyTorchLibrary() {
       }
     },
     "EmbeddingBag": {
+      "extras": {
+        "gothidden": false
+      },
       "num_embeddings": {
         "type": "int",
         "value": 1,
@@ -1084,8 +1177,15 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "Flatten": {},
+    "Flatten": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "Fold": {
+      "extras": {
+        "gothidden": false
+      },
       "output_size": {
         "type": "int",
         "value": [
@@ -1133,6 +1233,9 @@ export function getPyTorchLibrary() {
       }
     },
     "FractionalMaxPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1172,6 +1275,9 @@ export function getPyTorchLibrary() {
       }
     },
     "GRU": {
+      "extras": {
+        "gothidden": true
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -1223,6 +1329,9 @@ export function getPyTorchLibrary() {
       }
     },
     "GRUCell": {
+      "extras": {
+        "gothidden": false
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -1246,6 +1355,9 @@ export function getPyTorchLibrary() {
       }
     },
     "GroupNorm": {
+      "extras": {
+        "gothidden": false
+      },
       "num_groups": {
         "type": "int",
         "value": 1,
@@ -1276,6 +1388,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Hardshrink": {
+      "extras": {
+        "gothidden": false
+      },
       "lambd": {
         "type": "float",
         "value": 0.5,
@@ -1285,6 +1400,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Hardtanh": {
+      "extras": {
+        "gothidden": false
+      },
       "min_val": {
         "type": "float",
         "value": -1.0,
@@ -1307,8 +1425,15 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "Identity": {},
+    "Identity": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "InstanceNorm1d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -1346,6 +1471,9 @@ export function getPyTorchLibrary() {
       }
     },
     "InstanceNorm2d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -1383,6 +1511,9 @@ export function getPyTorchLibrary() {
       }
     },
     "InstanceNorm3d": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -1420,6 +1551,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LPPool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": 1,
@@ -1443,6 +1577,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LPPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1472,6 +1609,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LSTM": {
+      "extras": {
+        "gothidden": true
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -1523,6 +1663,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LSTMCell": {
+      "extras": {
+        "gothidden": false
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -1546,6 +1689,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LayerNorm": {
+      "extras": {
+        "gothidden": false
+      },
       "normalized_shape": {
         "type": "int",
         "value": 1,
@@ -1569,6 +1715,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LeakyReLU": {
+      "extras": {
+        "gothidden": false
+      },
       "negative_slope": {
         "type": "float",
         "value": 0.01,
@@ -1585,6 +1734,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Linear": {
+      "extras": {
+        "gothidden": false
+      },
       "in_features": {
         "type": "int",
         "value": 1,
@@ -1608,6 +1760,9 @@ export function getPyTorchLibrary() {
       }
     },
     "LocalResponseNorm": {
+      "extras": {
+        "gothidden": false
+      },
       "size": {
         "type": "int",
         "value": 1,
@@ -1637,8 +1792,15 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "LogSigmoid": {},
+    "LogSigmoid": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "LogSoftmax": {
+      "extras": {
+        "gothidden": false
+      },
       "dim": {
         "type": "int",
         "value": "None",
@@ -1648,6 +1810,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxPool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": 1,
@@ -1692,6 +1857,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxPool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1748,6 +1916,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxPool3d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1808,6 +1979,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxUnpool1d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": 1,
@@ -1831,6 +2005,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxUnpool2d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1863,6 +2040,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MaxUnpool3d": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -1898,6 +2078,9 @@ export function getPyTorchLibrary() {
       }
     },
     "MultiheadAttention": {
+      "extras": {
+        "gothidden": false
+      },
       "embed_dim": {
         "type": "int",
         "value": 1,
@@ -1914,6 +2097,9 @@ export function getPyTorchLibrary() {
       }
     },
     "PReLU": {
+      "extras": {
+        "gothidden": false
+      },
       "num_parameters": {
         "type": "int",
         "value": 1,
@@ -1930,6 +2116,9 @@ export function getPyTorchLibrary() {
       }
     },
     "RNN": {
+      "extras": {
+        "gothidden": true
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -1992,6 +2181,9 @@ export function getPyTorchLibrary() {
       }
     },
     "RNNCell": {
+      "extras": {
+        "gothidden": false
+      },
       "input_size": {
         "type": "int",
         "value": 1,
@@ -2026,6 +2218,9 @@ export function getPyTorchLibrary() {
       }
     },
     "RReLU": {
+      "extras": {
+        "gothidden": false
+      },
       "lower": {
         "type": "float",
         "value": 0.125,
@@ -2049,6 +2244,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReLU": {
+      "extras": {
+        "gothidden": false
+      },
       "inplace": {
         "type": "bool",
         "value": false,
@@ -2058,6 +2256,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReLU6": {
+      "extras": {
+        "gothidden": false
+      },
       "inplace": {
         "type": "bool",
         "value": false,
@@ -2067,6 +2268,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReflectionPad1d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": 1,
@@ -2076,6 +2280,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReflectionPad2d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [
@@ -2088,6 +2295,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReplicationPad1d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": 1,
@@ -2097,6 +2307,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReplicationPad2d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [
@@ -2109,6 +2322,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ReplicationPad3d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [
@@ -2122,6 +2338,9 @@ export function getPyTorchLibrary() {
       }
     },
     "SELU": {
+      "extras": {
+        "gothidden": false
+      },
       "inplace": {
         "type": "bool",
         "value": false,
@@ -2130,10 +2349,32 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "Sigmoid": {},
-    "Softmax": {},
-    "Softmax2d": {},
+    "Sigmoid": {
+      "extras": {
+        "gothidden": false
+      },
+    },
+    "Softmax": {
+      "extras": {
+        "gothidden": false
+      },
+      "dim": {
+        "type": "int",
+        "value": "1",
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      }
+    },
+    "Softmax2d": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "Softmin": {
+      "extras": {
+        "gothidden": false
+      },
       "dim": {
         "type": "int",
         "value": "None",
@@ -2143,6 +2384,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Softplus": {
+      "extras": {
+        "gothidden": false
+      },
       "beta": {
         "type": "int",
         "value": 1,
@@ -2159,6 +2403,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Softshrink": {
+      "extras": {
+        "gothidden": false
+      },
       "lambd": {
         "type": "float",
         "value": 0.5,
@@ -2167,8 +2414,15 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "Softsign": {},
+    "Softsign": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "SyncBatchNorm": {
+      "extras": {
+        "gothidden": false
+      },
       "num_features": {
         "type": "int",
         "value": 1,
@@ -2205,9 +2459,20 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
-    "Tanh": {},
-    "Tanhshrink": {},
+    "Tanh": {
+      "extras": {
+        "gothidden": false
+      },
+    },
+    "Tanhshrink": {
+      "extras": {
+        "gothidden": false
+      },
+    },
     "Threshold": {
+      "extras": {
+        "gothidden": false
+      },
       "threshold": {
         "type": "float",
         "value": 0.0,
@@ -2231,6 +2496,9 @@ export function getPyTorchLibrary() {
       }
     },
     "Unfold": {
+      "extras": {
+        "gothidden": false
+      },
       "kernel_size": {
         "type": "int",
         "value": [
@@ -2269,6 +2537,9 @@ export function getPyTorchLibrary() {
       }
     },
     "ZeroPad2d": {
+      "extras": {
+        "gothidden": false
+      },
       "padding": {
         "type": "int",
         "value": [

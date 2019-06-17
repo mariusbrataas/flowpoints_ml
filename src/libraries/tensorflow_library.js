@@ -21,6 +21,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Activation": {
@@ -30,6 +33,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ActivityRegularization": {
@@ -46,9 +52,16 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
-    "Add": {},
+    "Add": {
+      "extras": {
+        "gothidden": false
+      }
+    },
     "AlphaDropout": {
       "rate": {
         "type": "float",
@@ -70,9 +83,16 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
-    "Average": {},
+    "Average": {
+      "extras": {
+        "gothidden": false
+      }
+    },
     "AveragePooling1D": {
       "pool_size": {
         "type": "int",
@@ -101,6 +121,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "AveragePooling2D": {
@@ -137,6 +160,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "AveragePooling3D": {
@@ -175,6 +201,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "BatchNormalization": {
@@ -317,6 +346,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Bidirectional": {
@@ -340,6 +372,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Concatenate": {
@@ -349,6 +384,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Conv1D": {
@@ -462,6 +500,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Conv2D": {
@@ -578,6 +619,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Conv2DTranspose": {
@@ -704,6 +748,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Conv3D": {
@@ -823,6 +870,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Conv3DTranspose": {
@@ -942,6 +992,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ConvLSTM2D": {
@@ -1128,6 +1181,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Cropping1D": {
@@ -1140,6 +1196,9 @@ export function getTensorFlowLibrary() {
         "istuple": true,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Cropping2D": {
@@ -1161,6 +1220,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Cropping3D": {
@@ -1184,6 +1246,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Dense": {
@@ -1256,6 +1321,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "DenseFeatures": {
@@ -1272,6 +1340,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "DepthwiseConv2D": {
@@ -1378,6 +1449,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Dot": {
@@ -1394,6 +1468,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Dropout": {
@@ -1417,6 +1494,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ELU": {
@@ -1426,6 +1506,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Embedding": {
@@ -1484,6 +1567,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Flatten": {
@@ -1493,6 +1579,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GRU": {
@@ -1663,6 +1752,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GRUCell": {
@@ -1784,6 +1876,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GaussianDropout": {
@@ -1793,6 +1888,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GaussianNoise": {
@@ -1802,6 +1900,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalAveragePooling1D": {
@@ -1811,6 +1912,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalAveragePooling2D": {
@@ -1820,6 +1924,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalAveragePooling3D": {
@@ -1829,6 +1936,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalMaxPool1D": {
@@ -1838,6 +1948,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalMaxPool2D": {
@@ -1847,6 +1960,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "GlobalMaxPool3D": {
@@ -1856,6 +1972,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "InputSpec": {
@@ -1900,6 +2019,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LSTM": {
@@ -2070,6 +2192,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LSTMCell": {
@@ -2191,6 +2316,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Lambda": {
@@ -2221,6 +2349,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Layer": {
@@ -2230,6 +2361,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LeakyReLU": {
@@ -2239,6 +2373,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LinearModel": {
@@ -2269,6 +2406,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LocallyConnected1D": {
@@ -2380,6 +2520,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "LocallyConnected2D": {
@@ -2493,6 +2636,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Masking": {
@@ -2502,6 +2648,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "MaxPool1D": {
@@ -2532,6 +2681,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "MaxPool2D": {
@@ -2568,6 +2720,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "MaxPool3D": {
@@ -2606,11 +2761,26 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
-    "Maximum": {},
-    "Minimum": {},
-    "Multiply": {},
+    "Maximum": {
+      "extras": {
+        "gothidden": false
+      }
+    },
+    "Minimum": {
+      "extras": {
+        "gothidden": false
+      }
+    },
+    "Multiply": {
+      "extras": {
+        "gothidden": false
+      }
+    },
     "PReLU": {
       "alpha_initializer": {
         "type": "string",
@@ -2639,6 +2809,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Permute": {
@@ -2648,6 +2821,9 @@ export function getTensorFlowLibrary() {
         "istuple": true,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "RNN": {
@@ -2699,6 +2875,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ReLU": {
@@ -2722,6 +2901,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "RepeatVector": {
@@ -2731,6 +2913,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Reshape": {
@@ -2740,6 +2925,9 @@ export function getTensorFlowLibrary() {
         "istuple": true,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SeparableConv1D": {
@@ -2875,6 +3063,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SeparableConv2D": {
@@ -3019,6 +3210,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SimpleRNN": {
@@ -3161,6 +3355,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SimpleRNNCell": {
@@ -3261,6 +3458,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Softmax": {
@@ -3270,6 +3470,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SpatialDropout1D": {
@@ -3279,6 +3482,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SpatialDropout2D": {
@@ -3295,6 +3501,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "SpatialDropout3D": {
@@ -3311,6 +3520,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "StackedRNNCells": {
@@ -3320,9 +3532,16 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
-    "Subtract": {},
+    "Subtract": {
+      "extras": {
+        "gothidden": false
+      }
+    },
     "ThresholdedReLU": {
       "theta": {
         "type": "float",
@@ -3330,6 +3549,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "TimeDistributed": {
@@ -3339,6 +3561,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "UpSampling1D": {
@@ -3348,6 +3573,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "UpSampling2D": {
@@ -3374,6 +3602,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "UpSampling3D": {
@@ -3394,6 +3625,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "Wrapper": {
@@ -3403,6 +3637,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ZeroPadding1D": {
@@ -3414,6 +3651,9 @@ export function getTensorFlowLibrary() {
         "istuple": true,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ZeroPadding2D": {
@@ -3433,6 +3673,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     },
     "ZeroPadding3D": {
@@ -3453,6 +3696,9 @@ export function getTensorFlowLibrary() {
         "istuple": false,
         "min": -Infinity,
         "max": Infinity
+      },
+      "extras": {
+        "gothidden": false
       }
     }
   }

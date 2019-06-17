@@ -168,7 +168,8 @@ export class HelpDialog extends React.Component{
               <StepLabel onClick={() => {this.goTo(8)}}>Examples</StepLabel>
               <StepContent>
                 <Typography>
-                  PdGo86nNbq1B
+                  <Link href="https://mariusbrataas.github.io/flowpoints_ml/?p=KlHpdLzP3SDx" target="_blank">TensorFlow CNN used for the CIFAR10 example</Link><br/>
+                  <Link href="https://mariusbrataas.github.io/flowpoints_ml/?p=9fehu18ra4ty" target="_blank">PyTorch CNN used for the CIFAR10 example</Link>
                 </Typography>
               </StepContent>
             </Step>

@@ -6,19 +6,37 @@ import { MainLibrary } from "./MainLibrary";
 // Parameters
 function SimplifyParameters(parameters) {
   var new_parameters = [];
-  Object.keys(parameters).sort().map((p_key, idx) => {
+  var keys = [];
+  Object.keys(parameters).map(p_key => {
+    if (p_key !== 'extras') keys.push(p_key)
+  })
+  keys.sort().map((p_key, idx) => {
     new_parameters.push(parameters[p_key].value)
   })
+  new_parameters.push(parameters.extras)
   return new_parameters
 }
 function DeSimplifyParameters(parameters, recipe) {
   recipe = JSON.parse(JSON.stringify(recipe));
+  const recipe_copy = JSON.parse(JSON.stringify(recipe))
   var new_param_lib = {};
-  Object.keys(recipe).map(p_key => new_param_lib[p_key] = null)
-  Object.keys(recipe).sort().map((p_key, idx) => {
+  var keys = [];
+  Object.keys(recipe).map(p_key => {
+    if (p_key !== 'extras') keys.push(p_key)
+  })
+  keys.map(p_key => new_param_lib[p_key] = null)
+  keys.sort().map((p_key, idx) => {
     new_param_lib[p_key] = recipe[p_key];
     new_param_lib[p_key].value = parameters[idx];
+    if (new_param_lib[p_key].value === undefined) {
+      new_param_lib[p_key].value = recipe_copy[p_key].value
+    }
   })
+  if (parameters[keys.length]) {
+    new_param_lib.extras = parameters[keys.length]
+  } else {
+    new_param_lib.extras = recipe.extras
+  }
   return new_param_lib
 }
 
@@ -89,7 +107,10 @@ function SimplifyFlowpoint(flowpoint) {
     pos: SimplifyPosition(flowpoint.pos),
     concat_inputs: flowpoint.concat_inputs,
     concat_dim: flowpoint.concat_dim,
-    cont: {}
+    cont: {},
+    contig: flowpoint.contiguous,
+    re_ndims: flowpoint.reshape_ndims,
+    re_dims: flowpoint.reshape_dims
   }
   if (flowpoint.base_ref === 'Input') {
     new_flowpoint.cont = flowpoint.content;
@@ -110,11 +131,14 @@ function DeSimplifyFlowpoint(flowpoint, getEmptyFlowpointContent) {
     concat_dim: flowpoint.concat_dim || 0,
     output_shape: [],
     content: {},
+    contiguous: flowpoint.contig || false,
+    reshape_ndims: flowpoint.re_ndims || 0,
+    reshape_dims: flowpoint.re_dims || []
   };
   if (flowpoint.ref === 'Input') {
     new_flowpoint_lib.content = flowpoint.cont;
   } else {
-    new_flowpoint_lib.content = DeSimplifyContent(flowpoint.cont, recipe)
+    new_flowpoint_lib.content = DeSimplifyContent(flowpoint.cont, recipe, flowpoint.ref === 'Softmax')
   }
   return new_flowpoint_lib
 }
@@ -176,13 +200,15 @@ function DeSimplifyFlowpoints(flowpoints, getEmptyFlowpointContent) {
 function SimplifyEnvironment(env) {
   return [
     env.library,
-    env.notes
+    env.notes,
+    env.batch_first
   ]
 }
 function DeSimplifyEnvironment(env, main_env) {
   var new_env_lib = JSON.parse(JSON.stringify(main_env));
   new_env_lib.library = '' + env[0]
   new_env_lib.notes = '' + env[1]
+  new_env_lib.batch_first = env[2] || false
   new_env_lib.autoparams = main_env.autoparams
   return new_env_lib
 }

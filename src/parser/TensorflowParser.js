@@ -48,7 +48,7 @@ function Constructor(state, order, inps, dummies, indent) {
         const rawparams = content.parameters;
         var parameters = { name:{type:'string', value:current_point_name} }
         Object.keys(rawparams).map(raw_p_key => {
-          parameters[raw_p_key] = rawparams[raw_p_key]
+          if (raw_p_key !== 'extras') parameters[raw_p_key] = rawparams[raw_p_key]
         })
         //parameters['name'] = {type:'string', value:current_point_name};
         let inputs = dummies[key].inputs;

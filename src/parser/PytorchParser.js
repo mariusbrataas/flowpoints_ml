@@ -474,8 +474,10 @@ function Fit(indent, got_hidden_states) {
   msg += '\n' + dent(indent, 4) + 'if self.valid_loss_hist[-1] < best_validation:'
   msg += '\n' + dent(indent, 5) + "self.save('best_validation')"
   msg += '\n' + dent(indent, 5) + 'best_validation = self.valid_loss_hist[-1]'
-  msg += '\n\n' + dent(indent, 2) + '# Resetting hidden states'
-  msg += '\n' + dent(indent, 2) + 'self.reset_hidden_states()'
+  if (got_hidden_states) {
+    msg += '\n\n' + dent(indent, 2) + '# Resetting hidden states'
+    msg += '\n' + dent(indent, 2) + 'self.reset_hidden_states()'
+  }
   msg += '\n\n' + dent(indent, 2) + '# Switching to eval'
   msg += '\n' + dent(indent, 2) + 'self.eval()'
 

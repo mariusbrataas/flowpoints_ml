@@ -356,6 +356,7 @@ export function getPyTorchAutoparams() {
         return tmp
       },
       autoparams: (inp, p) => {
+        p.num_embeddings.value = inp[inp.length - 1]
         return p
       }
     },

@@ -42,7 +42,27 @@ const EnvironmentSection = props => {
   return (
     <div>
 
-      <h3 style={{marginTop:0}}>Environment</h3>
+      <h3 style={{marginTop:0}}>Model name</h3>
+
+      <TextFieldContainer
+        label='Model name'
+        multiline={true}
+        value={props.state.environment.modelname}
+        style={{width:'100%'}}
+        onChange={val => {
+
+          // Loading from state
+          var environment = props.refresh().environment;
+
+          // Changing notes
+          environment.modelname = val;
+
+          // Updating state
+          props.updateEnvironment(environment)
+
+        }}/>
+
+      <h3 style={{marginTop:30}}>Environment</h3>
 
       <SelectContainer
         label='Library'
@@ -63,20 +83,37 @@ const EnvironmentSection = props => {
         }}/>
 
       {
-        environment.library === 'pytorch' ? <div style={{paddingTop:20}}><SwitchContainer
-          label='batch first'
-          value={environment.batch_first}
-          style={{paddingTop:0}}
-          onChange={val => {
+        environment.library === 'pytorch' ? <div style={{paddingTop:20}}>
+            <SwitchContainer
+              label='batch first'
+              value={environment.batch_first}
+              style={{paddingTop:0}}
+              onChange={val => {
 
-            // Loading from state
-            var environment = props.refresh().environment;
-            environment.batch_first = val;
+                // Loading from state
+                var environment = props.refresh().environment;
+                environment.batch_first = val;
 
-            // Updating state
-            props.updateEnvironment(environment)
+                // Updating state
+                props.updateEnvironment(environment)
 
-          }}/></div> : null
+            }}/>
+            <SwitchContainer
+              label='include training function'
+              value={environment.include_training}
+              style={{paddingTop:0}}
+              onChange={val => {
+
+                // Loading from state
+                var environment = props.refresh().environment;
+                environment.include_training = val;
+
+                // Updating state
+                props.updateEnvironment(environment)
+
+              }}
+            />
+          </div> : null
       }
 
     </div>

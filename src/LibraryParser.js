@@ -201,7 +201,9 @@ function SimplifyEnvironment(env) {
   return [
     env.library,
     env.notes,
-    env.batch_first
+    env.batch_first,
+    env.modelname,
+    env.include_training
   ]
 }
 function DeSimplifyEnvironment(env, main_env) {
@@ -209,6 +211,8 @@ function DeSimplifyEnvironment(env, main_env) {
   new_env_lib.library = '' + env[0]
   new_env_lib.notes = '' + env[1]
   new_env_lib.batch_first = env[2] || false
+  new_env_lib.modelname = env[3] || 'NeuralNet'
+  new_env_lib.include_training = env[4] || true
   new_env_lib.autoparams = main_env.autoparams
   return new_env_lib
 }

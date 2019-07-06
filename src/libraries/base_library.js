@@ -80,6 +80,7 @@ export function getBaseLibrary() {
       "pytorch": "CELU"
     },
     "Concatenate": {
+      "pytorch": "Concatenate",
       "tensorflow": "Concatenate"
     },
     "ConstantPad1d": {
@@ -302,7 +303,11 @@ export function getBaseLibrary() {
       "pytorch": "MaxUnpool3d"
     },
     "Maximum": {
+      "pytorch": "Max",
       "tensorflow": "Maximum"
+    },
+    "Mean": {
+      "pytorch": "Mean"
     },
     "Minimum": {
       "tensorflow": "Minimum"
@@ -454,6 +459,102 @@ export function getBaseLibrary() {
     },
     "ZeroPadding3D": {
       "tensorflow": "ZeroPadding3D"
+    },
+    "ResNet18": {
+      "pytorch": "resnet18"
+    },
+    "ResNet34": {
+      "pytorch": "resnet34"
+    },
+    "ResNet50": {
+      "pytorch": "resnet50"
+    },
+    "ResNet101": {
+      "pytorch": "resnet101"
+    },
+    "ResNet152": {
+      "pytorch": "resnet152"
+    },
+    "VGG11": {
+      "pytorch": "vgg11"
+    },
+    "VGG13": {
+      "pytorch": "vgg13"
+    },
+    "VGG16": {
+      "pytorch": "vgg16"
+    },
+    "VGG19": {
+      "pytorch": "vgg19"
+    },
+    "AlexNet": {
+      "pytorch": "alexnet"
+    },
+    "SqueezeNet1_0": {
+      "pytorch": "squeezenet1_0"
+    },
+    "SqueezeNet1_1": {
+      "pytorch": "squeezenet1_1"
+    },
+    "DenseNet121": {
+      "pytorch": "densenet121"
+    },
+    "DenseNet169": {
+      "pytorch": "densenet169"
+    },
+    "DenseNet161": {
+      "pytorch": "densenet161"
+    },
+    "DenseNet201": {
+      "pytorch": "densenet201"
+    },
+    "InceptionV3": {
+      "pytorch": "inception_v3"
+    },
+    "GoogLeNet": {
+      "pytorch": "googlenet"
+    },
+    "ShuffleNetV2_x0_5": {
+      "pytorch": "shufflenet_v2_x0_5"
+    },
+    "ShuffleNetV2_x1_0": {
+      "pytorch": "shufflenet_v2_x1_0"
+    },
+    "ShuffleNetV2_x1_5": {
+      "pytorch": "shufflenet_v2_x1_5"
+    },
+    "ShuffleNet": {
+      "pytorch": "shufflenet_v2_x2_0"
+    },
+    "MobileNetV2": {
+      "pytorch": "mobilenet_v2"
+    },
+    "ResNext50": {
+      "pytorch": "resnext50_32x4d"
+    },
+    "ResNext101": {
+      "pytorch": "resnext101_32x8d"
+    },
+    "Segmentation FCN ResNet50": {
+      "pytorch": "segmentation.fcn_resnet50"
+    },
+    "Segmentation FCN ResNet101": {
+      "pytorch": "segmentation.fcn_resnet101"
+    },
+    "Segmentation DeepLabV3 ResNet50": {
+      "pytorch": "segmentation.deeplabv3_resnet50"
+    },
+    "Segmentation DeepLabV3 ResNet101": {
+      "pytorch": "segmentation.deeplabv3_resnet101"
+    },
+    "Detection Faster R-CNN ResNet50": {
+      "pytorch": "detection.fasterrcnn_resnet50_fpn"
+    },
+    "Detection Mask R-CNN ResNet50": {
+      "pytorch": "detection.maskrcnn_resnet50_fpn"
+    },
+    "Keypoint R-CNN ResNet50": {
+      "pytorch": "detection.keypointrcnn_resnet50_fpn"
     }
   }
 }

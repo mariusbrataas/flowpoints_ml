@@ -23,7 +23,9 @@ export function MainLibrary() {
       notes: '',
       order: [],
       dummies: {},
-      batch_first: true
+      batch_first: true,
+      modelname: 'NeuralNet',
+      include_training: true
     },
     visual: {
       darkTheme: false,

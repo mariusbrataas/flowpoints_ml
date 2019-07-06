@@ -479,6 +479,18 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
+    "Concatenate": {
+      "extras": {
+        "gothidden": false
+      },
+      "dim": {
+        "type": "int",
+        "value": 1,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      }
+    },
     "ConstantPad1d": {
       "extras": {
         "gothidden": false
@@ -1809,6 +1821,25 @@ export function getPyTorchLibrary() {
         "max": Infinity
       }
     },
+    "Max": {
+      "extras": {
+        "gothidden": false
+      },
+      "dim": {
+        "type": "int",
+        "value": 1,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "keepdim": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      }
+    },
     "MaxPool1d": {
       "extras": {
         "gothidden": false
@@ -2073,6 +2104,25 @@ export function getPyTorchLibrary() {
           0
         ],
         "istuple": true,
+        "min": -Infinity,
+        "max": Infinity
+      }
+    },
+    "Mean": {
+      "extras": {
+        "gothidden": false
+      },
+      "dim": {
+        "type": "int",
+        "value": 1,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "keepdim": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
         "min": -Infinity,
         "max": Infinity
       }
@@ -2550,6 +2600,891 @@ export function getPyTorchLibrary() {
         "min": -Infinity,
         "max": Infinity
       }
-    }
+    },
+    "resnet18": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnet34": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnet50": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnet101": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnet152": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "vgg11": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "vgg13": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "vgg16": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "vgg19": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "alexnet": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "squeezenet1_0": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "squeezenet1_1": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "densenet121": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "densenet169": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "densenet161": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "densenet201": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "inception_v3": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "googlenet": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "shufflenet_v2_x0_5": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "shufflenet_v2_x1_0": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "shufflenet_v2_x1_5": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "shufflenet_v2_x2_0": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "mobilenet_v2": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnext50_32x4d": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "resnext101_32x8d": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 1000,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "segmentation.fcn_resnet50": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 21,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "segmentation.fcn_resnet101": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 21,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "segmentation.deeplabv3_resnet50": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 21,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "segmentation.deeplabv3_resnet101": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 21,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "detection.fasterrcnn_resnet50_fpn": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "pretrained_backbone": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 91,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "detection.maskrcnn_resnet50_fpn": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "pretrained_backbone": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 91,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
+    "detection.keypointrcnn_resnet50_fpn": {
+      "extras": {
+        "gothidden": false,
+        "torchvision": true
+      },
+      "pretrained": {
+        "type": "bool",
+        "value": false,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "pretrained_backbone": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "progress": {
+        "type": "bool",
+        "value": true,
+        "istuple": false,
+        "min": -Infinity,
+        "max": Infinity
+      },
+      "num_classes": {
+        "type": "int",
+        "value": 91,
+        "istuple": false,
+        "min": 0,
+        "max": Infinity
+      }
+    },
   }
 }

@@ -216,13 +216,17 @@ class App extends Component{
             var tmp_autoparams = autoparams[point.content[library].reference];
             if (tmp_autoparams) {
               var bestInp = null
+              var all_inps = []
               dummies[key].inputs.map(inp_key => {
-                if (visited.includes(inp_key)) bestInp = inp_key
+                if (visited.includes(inp_key)) {
+                  bestInp = inp_key
+                  all_inps.push(flowpoints[inp_key].output_shape.map(value => 1 * value))
+                }
               })
               if (flowpoints[bestInp]) {
                 const prevshape = flowpoints[bestInp].output_shape.map(value => 1 * value);
-                point.content[library].parameters = tmp_autoparams.autoparams(prevshape, point.content[library].parameters)
-                point.output_shape = tmp_autoparams.outshape(prevshape, point.content[library].parameters).map(value => parseInt(value))
+                point.content[library].parameters = tmp_autoparams.autoparams(all_inps, point.content[library].parameters)
+                point.output_shape = tmp_autoparams.outshape(all_inps, point.content[library].parameters).map(value => parseInt(value))
                 visited.push(key)
               }
             }

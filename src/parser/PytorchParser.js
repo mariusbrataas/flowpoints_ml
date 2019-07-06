@@ -16,7 +16,7 @@ function getOutputTargetName(key, flowpoints) {
 
 function PyTorchImports(indent) {
   var msg = '# Importing PyTorch tools'
-  msg += '\nimport torch'
+  msg += '\nimport torch, torchvision'
   msg += '\nfrom torch import nn, optim, cuda'
   msg += '\n\n\n# Importing other libraries'
   msg += '\nimport numpy as np'
@@ -26,44 +26,22 @@ function PyTorchImports(indent) {
 }
 
 
-function Flatten(indent) {
-  var msg = '# Helper class for flattening'
-  msg += '\nclass Flatten(nn.Module):'
-  msg += '\n' + dent(indent, 1) + 'def __init__(self):'
-  msg += '\n' + dent(indent, 2) + 'super(Flatten, self).__init__()'
-  msg += '\n' + dent(indent, 1) + 'def forward(self, x):'
-  msg += '\n' + dent(indent, 2) + 'return x.view(x.shape[0], -1)'
-  return msg
-}
-
-
 
 function Constructor(state, order, indent, dummies, states, init_states, got_hidden_states, library, modelID) {
 
   var flowpoints = state.flowpoints;
   var environment = state.environment;
+
+  let modelname = environment.modelname === '' ? 'NeuralNet' : environment.modelname
   
   // Basics
   var msg = '# Model'
-  msg += '\nclass NeuralNet(nn.Module):'
-  msg += '\n\n\n' + dent(indent, 1) + 'def __init__(self, optimizer=optim.SGD, alpha=0.001, criterion=nn.CrossEntropyLoss(), use_cuda=None):'
+  msg += '\nclass ' + modelname + '(nn.Module):'
+  msg += '\n\n\n' + dent(indent, 1) + 'def __init__(self):'
   msg += '\n\n' + dent(indent, 2) + '# Basics'
-  msg += '\n' + dent(indent, 2) + 'super(NeuralNet, self).__init__()'
+  msg += '\n' + dent(indent, 2) + 'super(' + modelname + ', self).__init__()'
   msg += '\n' + dent(indent, 2) + 'self.name        = ' + (modelID ? ("'" + modelID + "'") : "'model'")
   msg += '\n' + dent(indent, 2) + 'self.batch_first = ' + (environment.batch_first ? 'True' : 'False')
-  msg += '\n' + dent(indent, 2) + 'self.__call__    = self.predict'
-  msg += '\n\n' + dent(indent, 2) + '# Settings'
-  msg += '\n' + dent(indent, 2) + 'self.optim_type = optimizer'
-  msg += '\n' + dent(indent, 2) + 'self.optimizer  = None'
-  msg += '\n' + dent(indent, 2) + 'self.alpha      = alpha'
-  msg += '\n' + dent(indent, 2) + 'self.criterion  = criterion'
-  msg += '\n\n' + dent(indent, 2) + '# Use CUDA?'
-  msg += '\n' + dent(indent, 2) + 'self.use_cuda = use_cuda if (use_cuda != None and cuda.is_available()) else cuda.is_available()'
-  msg += '\n\n' + dent(indent, 2) + '# Current loss and loss history'
-  msg += '\n' + dent(indent, 2) + 'self.train_loss = 0'
-  msg += '\n' + dent(indent, 2) + 'self.valid_loss = 0'
-  msg += '\n' + dent(indent, 2) + 'self.train_loss_hist = []'
-  msg += '\n' + dent(indent, 2) + 'self.valid_loss_hist = []'
 
   // Prep aligning recurrent states
   var max_l = 0;
@@ -98,7 +76,13 @@ function Constructor(state, order, indent, dummies, states, init_states, got_hid
   order.map(key => {
     let point = flowpoints[key];
     
-    if (point.base_ref !== 'Input') {
+    if (point.base_ref === 'Concatenate') {
+
+    } else if (point.base_ref === 'Input') {
+
+    } else if (point.base_ref === 'Flatten') {
+
+    } else if (point.base_ref !== 'Mean' && point.base_ref !== 'Maximum') {
       if (flowpoints[key].content[library]) {
         let content = point.content[environment.library.toLowerCase()];
         let parameters = content.parameters
@@ -110,7 +94,8 @@ function Constructor(state, order, indent, dummies, states, init_states, got_hid
         })
 
         // Init object
-        msg += '\n' + dent(indent, 2) + 'self.' + getPointName(flowpoints, key) + ' = ' + (point.base_ref === 'Flatten' ? '' : 'nn.') + content.reference + '(';
+        let prefix = content.parameters.extras.torchvision ? 'torchvision.models.' : 'nn.'
+        msg += '\n' + dent(indent, 2) + 'self.' + getPointName(flowpoints, key) + ' = ' + prefix + content.reference + '(';
 
         // Adding arguments
         Object.keys(parameters).map(p_key => {
@@ -142,7 +127,6 @@ function Constructor(state, order, indent, dummies, states, init_states, got_hid
               }
             } else {
               msg += (param.value === '' ? 'None' : param.value)
-              //msg += (param.value === '' ? (param.min === Infinity ? 0 : param.min) : param.value)
             }
             msg += ','
 
@@ -156,22 +140,14 @@ function Constructor(state, order, indent, dummies, states, init_states, got_hid
   })
 
   // Startup routines
-  msg += '\n\n' + dent(indent, 2) + '# Running startup routines'
-  msg += '\n' + dent(indent, 2) + 'self.startup_routines()'
-  if (got_hidden_states) msg += '\n' + dent(indent, 2) + 'self.reset_hidden_states()'
+  if (got_hidden_states) {
+    msg += '\n\n' + dent(indent, 2) + '# Running startup routines'
+    msg += '\n' + dent(indent, 2) + 'self.reset_hidden_states()'
+  }
 
   // Returning
   return msg
 
-}
-
-
-function StartupRoutines(indent) {
-  var msg = dent(indent, 1) + 'def startup_routines(self):'
-  msg += '\n' + dent(indent, 2) + 'self.optimizer = self.optim_type(self.parameters(), lr=self.alpha)'
-  msg += '\n' + dent(indent, 2) + 'if self.use_cuda:'
-  msg += '\n' + dent(indent, 3) + 'self.cuda()'
-  return msg
 }
 
 
@@ -207,35 +183,6 @@ function ResetHidden(flowpoints, order, inps, states, dummies, indent, init_stat
 }
 
 
-function Predict(flowpoints, inps, indent, got_hidden_states) {
-  var msg = dent(indent, 1) + 'def predict(self, '
-
-  // Adding all inputs
-  const formated_inputs = FormatParamInputs(flowpoints, inps);
-  msg += formated_inputs + (got_hidden_states ? ', reset_hidden_states=False' : '') + '):'
-
-  // Running preds
-  msg += '\n\n' + dent(indent, 2) + '# Switching off autograd'
-  msg += '\n' + dent(indent, 2) + 'with torch.no_grad():'
-  msg += '\n\n' + dent(indent, 3) + '# Use CUDA?'
-  msg += '\n' + dent(indent, 3) + 'if self.use_cuda:'
-  inps.map(key => {
-    const p_name = getPointName(flowpoints, key);
-    msg += '\n' + dent(indent, 4) + p_name + ' = ' + p_name + '.cuda()'
-  })
-  if (got_hidden_states) {
-    msg += '\n\n' + dent(indent, 3) + '# Reset hidden states?'
-    msg += '\n' + dent(indent, 3) + 'if reset_hidden_states:'
-    msg += '\n' + dent(indent, 4) + 'self.reset_hidden_states(' + getPointName(flowpoints, inps[0]) + ')'
-  }
-  msg += '\n\n' + dent(indent, 3) + '# Running inference'
-  msg += '\n' + dent(indent, 3) + 'return self.forward(' + formated_inputs + ')'
-
-  // Returning
-  return msg
-}
-
-
 function Forward(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library) {
   var msg = dent(indent, 1) + 'def forward(self, '
 
@@ -248,7 +195,33 @@ function Forward(flowpoints, order, inps, states, dummies, indent, init_states, 
   var outputs = [];
   order.map(key => {
     const point = dummies[key];
-    if (point.base_ref !== 'Input') {
+    if (point.base_ref === 'Concatenate') {
+      var step_msg = dent(indent, 2) + getStateName(key, flowpoints, states, init_states)
+      step_msg += ' = torch.cat(['
+      point.inputs.map(inp_key => step_msg += getStateName(inp_key, flowpoints, states, init_states) + ', ')
+      step_msg = step_msg.substring(0, step_msg.length - 2) + '], dim=' + flowpoints[key].content.pytorch.parameters.dim.value + ')'
+      step_lib.push({ msg:step_msg, title:'Concatenate' })
+    } else if (point.base_ref === 'Mean') {
+      var step_msg = dent(indent, 2) + getStateName(key, flowpoints, states, init_states)
+      step_msg += ' = torch.mean('
+      point.inputs.map(inp_key => step_msg += getStateName(inp_key, flowpoints, states, init_states) + ' + ')
+      step_msg = step_msg.substring(0, step_msg.length - 3) + ', dim=' + flowpoints[key].content.pytorch.parameters.dim.value + ')'
+      step_lib.push({ msg:step_msg, title:'Mean' })
+    } else if (point.base_ref === 'Maximum') {
+      var step_msg = dent(indent, 2) + getStateName(key, flowpoints, states, init_states)
+      step_msg += ' = torch.max('
+      point.inputs.map(inp_key => step_msg += getStateName(inp_key, flowpoints, states, init_states) + ' + ')
+      step_msg = step_msg.substring(0, step_msg.length - 3) + ', dim=' + flowpoints[key].content.pytorch.parameters.dim.value + ')[0]'
+      step_lib.push({ msg:step_msg, title:'Max' })
+    } else if (point.base_ref === 'Input') {
+
+    } else if (point.base_ref === 'Flatten') {
+      let sn1 = getStateName(key, flowpoints, states, init_states)
+      let sn2 = getStateName(point.inputs[0], flowpoints, states, init_states)
+      var step_msg = dent(indent, 2) + sn1
+      step_msg += ' = ' + sn2 + '.view(' + sn2 + '.shape[0], -1)'
+      step_lib.push({ msg:step_msg, title:'Flatten' })
+    } else {
       if (flowpoints[key].content[library]) {
         var step_msg = dent(indent, 2) + getStateName(key, flowpoints, states, init_states)
         if (flowpoints[key].content.pytorch.parameters.extras.gothidden) step_msg += ', self.' + getPointName(flowpoints, key) + '_hidden'
@@ -258,7 +231,7 @@ function Forward(flowpoints, order, inps, states, dummies, indent, init_states, 
             //torch.cat(tensors, dim=0
             step_msg += 'torch.cat(['
             point.inputs.map(inp_key => step_msg += getStateName(inp_key, flowpoints, states, init_states) + ', ')
-            step_msg = step_msg.substring(0, step_msg.length -2) + '], dim=' + flowpoints[key].concat_dim + ')'
+            step_msg = step_msg.substring(0, step_msg.length -2 ) + '], dim=' + flowpoints[key].concat_dim + ')'
           } else {
             point.inputs.map(inp_key => step_msg += getStateName(inp_key, flowpoints, states, init_states) + ' + ');
             step_msg = step_msg.substring(0, step_msg.length - 3);
@@ -297,7 +270,7 @@ function Forward(flowpoints, order, inps, states, dummies, indent, init_states, 
 
   // Max length
   var max_l = 0;
-  step_lib.map(step => max_l = Math.max(max_l, step.msg.length > 50 ? 0 : step.msg.length))
+  step_lib.map(step => max_l = Math.max(max_l, step.msg.length > 60 ? 0 : step.msg.length))
 
   // Adding steps
   step_lib.map(step => {
@@ -324,222 +297,31 @@ function Forward(flowpoints, order, inps, states, dummies, indent, init_states, 
 }
 
 
-function FitStep(dummies, inps, indent, outs, flowpoints, states, init_states, got_hidden_states, library) {
-  const formated_inputs = FormatParamInputs(dummies, inps);
-  var msg = dent(indent, 1) + 'def fit_step(self, training_loader'
-  if (got_hidden_states) msg += ', reset_hidden_states=False'
-  msg += '):'
-  msg += '\n\n' + dent(indent, 2) + '# Preparations for fit step'
-  if (got_hidden_states) {
-    msg += '\n' + dent(indent, 2) + 'self.train_loss = 0        # Resetting training loss'
-    msg += '\n' + dent(indent, 2) + 'self.train()               # Switching to autograd'
-  } else {
-    msg += '\n' + dent(indent, 2) + 'self.train_loss = 0 # Resetting training loss'
-    msg += '\n' + dent(indent, 2) + 'self.train()        # Switching to autograd'
-  }
-  msg += '\n\n' + dent(indent, 2) + '# Looping through data'
-  msg += '\n' + dent(indent, 2) + 'for idx, (' + formated_inputs + ','
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
-  })
-  msg = msg.slice(0, -1)
-  msg += ') in enumerate(training_loader):'
-  msg += '\n\n' + dent(indent, 3) + '# Use CUDA?'
-  msg += '\n' + dent(indent, 3) + 'if self.use_cuda:'
-  inps.map(key => {
-    const p_name = getPointName(dummies, key);
-    msg += '\n' + dent(indent, 4) + '' + p_name + ' = ' + p_name + '.cuda()'
-  })
-  outs.map(key => {
-    const p_name = getOutputTargetName(key, flowpoints);
-    msg += '\n' + dent(indent, 4) + '' + p_name + ' = ' + p_name + '.cuda()'
-  })
-  if (got_hidden_states) {
-    msg += '\n\n' + dent(indent, 3) + '# Reset hidden states?'
-    msg += '\n' + dent(indent, 3) + 'if reset_hidden_states or idx == 0:'
-    msg += '\n' + dent(indent, 4) + 'self.reset_hidden_states(' + getPointName(flowpoints, inps[0]) + ')'
-  }
-  msg += '\n\n' + dent(indent, 3) + '# Forward pass'
-  msg += '\n' + dent(indent, 3) + 'self.forward(' + formated_inputs + ')'
-
-  // Loss
-  msg += '\n\n' + dent(indent, 3) + '# Calculating loss'
-  outs.map((key, idx) => {
-    msg += '\n' + dent(indent, 3) + 'loss ' + (idx === 0 ? '= ' : '+= ')
-    msg += 'self.criterion(' + getStateName(key, flowpoints, states, init_states) + ', '
-    msg += getOutputTargetName(key, flowpoints)
-    msg += ')'
-  })
-  msg += '\n' + dent(indent, 3) + 'self.train_loss += loss.item() # Adding to epoch loss'
-  
-  // Backward pass and optimization
-  msg += '\n\n' + dent(indent, 3) + '# Backward pass and optimization'
-  msg += '\n' + dent(indent, 3) + 'loss.backward()            # Backward pass'
-  msg += '\n' + dent(indent, 3) + 'self.optimizer.step()      # Optimizing weights'
-  msg += '\n' + dent(indent, 3) + 'self.optimizer.zero_grad() # Clearing gradients'
-  msg += '\n\n' + dent(indent, 2) + '# Adding loss to history'
-  msg += '\n' + dent(indent, 2) + 'self.train_loss_hist.append(self.train_loss / len(training_loader))'
-
-  // Returning
-  return msg
-
-}
-
-
-function ValidationStep(dummies, inps, indent, outs, flowpoints, states, init_states, got_hidden_states, library) {
-  const formated_inputs = FormatParamInputs(dummies, inps);
-  var msg = dent(indent, 1) + 'def validation_step(self, validation_loader'
-  if (got_hidden_states) msg += ', reset_hidden_states=False'
-  msg += '):'
-  msg += '\n\n' + dent(indent, 2) + '# Preparations for validation step'
-  msg += '\n' + dent(indent, 2) + 'self.valid_loss = 0 # Resetting validation loss'
-  msg += '\n\n' + dent(indent, 2) + '# Switching off autograd'
-  msg += '\n' + dent(indent, 2) + 'with torch.no_grad():'
-  msg += '\n\n' + dent(indent, 3) + '# Looping through data'
-  msg += '\n' + dent(indent, 3) + 'for idx, (' + formated_inputs + ','
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
-  })
-  msg = msg.slice(0, -1)
-  msg += ') in enumerate(validation_loader):'
-  msg += '\n\n' + dent(indent, 4) + '# Use CUDA?'
-  msg += '\n' + dent(indent, 4) + 'if self.use_cuda:'
-  inps.map(key => {
-    const p_name = getPointName(dummies, key);
-    msg += '\n' + dent(indent, 5) + p_name + ' = ' + p_name + '.cuda()'
-  })
-  outs.map(key => {
-    const p_name = getOutputTargetName(key, flowpoints);
-    msg += '\n' + dent(indent, 5) + '' + p_name + ' = ' + p_name + '.cuda()'
-  })
-  if (got_hidden_states) {
-    msg += '\n\n' + dent(indent, 4) + '# Reset hidden states?'
-    msg += '\n' + dent(indent, 4) + 'if reset_hidden_states or idx == 0:'
-    msg += '\n' + dent(indent, 5) + 'self.reset_hidden_states(' + getPointName(flowpoints, inps[0]) + ')'
-  }
-  msg += '\n\n' + dent(indent, 4) + '# Forward pass'
-  msg += '\n' + dent(indent, 4) + 'self.forward(' + formated_inputs + ')'
-
-  // Loss
-  msg += '\n\n' + dent(indent, 4) + '# Calculating loss'
-  outs.map((key, idx) => {
-    msg += '\n' + dent(indent, 4) + 'loss ' + (idx === 0 ? '= ' : '+= ')
-    msg += 'self.criterion(' + getStateName(key, flowpoints, states, init_states) + ', '
-    msg += getOutputTargetName(key, flowpoints)
-    msg += ')'
-  })
-  msg += '\n' + dent(indent, 4) + 'self.valid_loss += loss.item() # Adding to epoch loss'
-  msg += '\n\n' + dent(indent, 3) + '# Adding loss to history'
-  msg += '\n' + dent(indent, 3) + 'self.valid_loss_hist.append(self.valid_loss / len(validation_loader))'
-
-  // Returning
-  return msg
-
-}
-
-
-function Fit(indent, got_hidden_states) {
-  var msg = dent(indent, 1) + 'def fit(self, training_loader, validation_loader=None, epochs=10, show_progress=True, save_best=False'
-  if (got_hidden_states) msg += ', reset_hidden_states=False'
-  msg += '):'
-  msg += '\n\n' + dent(indent, 2) + '# Helpers'
-  msg += '\n' + dent(indent, 2) + 'best_validation = 1e5'
-  msg += '\n\n' + dent(indent, 2) + '# Possibly printing progress'
-  msg += '\n' + dent(indent, 2) + 'if show_progress:'
-  msg += '\n' + dent(indent, 3) + 'epoch_l = max(len(str(epochs)), 2)' //HERE
-  msg += '\n' + dent(indent, 3) + "msg = '%sEpoch   Training loss' % ''.rjust(2 * epoch_l - 4, ' ')"
-  msg += '\n' + dent(indent, 3) + "msg += ('   Validation loss' if validation_loader else '') + '   Time remaining'"
-  msg += '\n' + dent(indent, 3) + 'print(msg)'
-  msg += '\n' + dent(indent, 3) + 't = time.time()'
-  msg += '\n\n' + dent(indent, 2) + '# Looping through epochs'
-  msg += '\n' + dent(indent, 2) + 'for epoch in range(epochs):'
-  msg += '\n\n' + dent(indent, 3) + '# Fit step'
-  msg += '\n' + dent(indent, 3) + 'self.fit_step(training_loader' + (got_hidden_states ? ', reset_hidden_states=reset_hidden_states' : '') + ')'
-  msg += '\n\n' + dent(indent, 3) + '# Validation step'
-  msg += '\n' + dent(indent, 3) + 'if validation_loader:'
-  msg += '\n' + dent(indent, 4) + 'self.validation_step(validation_loader' + (got_hidden_states ? ', reset_hidden_states=reset_hidden_states' : '') + ')'
-  msg += '\n\n' + dent(indent, 3) + '# Possibly printing progress'
-  msg += '\n' + dent(indent, 3) + 'if show_progress:'
-  msg += '\n' + dent(indent, 4) + 'eta_s = ((time.time() - t) / (epoch + 1)) * (epochs - epoch - 1)'
-  msg += '\n' + dent(indent, 4) + "msg = '%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' '))"
-  msg += '\n' + dent(indent, 4) + "msg += ' | %s' % str(round(self.train_loss_hist[-1], 9)).ljust(13, ' ')"
-  msg += '\n' + dent(indent, 4) + "if validation_loader: msg += ' | %s' % str(round(self.valid_loss_hist[-1], 9)).ljust(15, ' ')"
-  msg += '\n' + dent(indent, 4) + "msg += ' | '"
-  msg += '\n' + dent(indent, 4) + "msg += '%sh ' % round(eta_s / 3600) if eta_s > 3600 else ''"
-  msg += '\n' + dent(indent, 4) + "msg += '%sm ' % round(eta_s % 3600 / 60) if eta_s > 60 else ''"
-  msg += '\n' + dent(indent, 4) + "msg += '%ss ' % round(eta_s % 60)"
-  msg += '\n' + dent(indent, 4) + 'print(msg)'
-  msg += '\n\n' + dent(indent, 3) + '# Possibly saving model'
-  msg += '\n' + dent(indent, 3) + 'if save_best:'
-  msg += '\n' + dent(indent, 4) + 'if self.valid_loss_hist[-1] < best_validation:'
-  msg += '\n' + dent(indent, 5) + "self.save('best_validation')"
-  msg += '\n' + dent(indent, 5) + 'best_validation = self.valid_loss_hist[-1]'
-  if (got_hidden_states) {
-    msg += '\n\n' + dent(indent, 2) + '# Resetting hidden states'
-    msg += '\n' + dent(indent, 2) + 'self.reset_hidden_states()'
-  }
-  msg += '\n\n' + dent(indent, 2) + '# Switching to eval'
-  msg += '\n' + dent(indent, 2) + 'self.eval()'
-
-  // Returning
-  return msg
-}
-
-
-function PlotHist(indent) {
-  var msg = dent(indent, 1) + 'def plot_hist(self):'
-  msg += '\n\n' + dent(indent, 2) + '# Adding plots'
-  msg += '\n' + dent(indent, 2) + "plt.plot(self.train_loss_hist, color='blue', label='Training loss')"
-  msg += '\n' + dent(indent, 2) + "plt.plot(self.valid_loss_hist, color='springgreen', label='Validation loss')"
-  msg += '\n\n' + dent(indent, 2) + '# Axis labels'
-  msg += '\n' + dent(indent, 2) + "plt.xlabel('Epoch')"
-  msg += '\n' + dent(indent, 2) + "plt.ylabel('Loss')"
-  msg += '\n' + dent(indent, 2) + "plt.legend(loc='upper right')"
-  msg += '\n\n' + dent(indent, 2) + '# Displaying plot'
-  msg += '\n' + dent(indent, 2) + 'plt.show()'
-
-  // Returning
-  return msg
-}
-
-
-function SaveLoad(flowpoints, dummies, order, indent, library) {
-  var msg = dent(indent, 1) + "def save(self, name=None):"
-  msg += '\n' + dent(indent, 2) + "if not name: name = self.name + '_%sepochs' % len(self.train_loss_hist)"
+function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
+  var msg = dent(indent, 1) + "def save(self, name=None, extras={}):"
+  msg += '\n' + dent(indent, 2) + "if not name: name = self.name"
   msg += '\n' + dent(indent, 2) + "if not '.pth' in name: name += '.pth'"
   msg += "\n" + dent(indent, 2) + "torch.save({"
   order.map(key => {
     const point = dummies[key]
-    if (point.base_ref !== 'Input') {
+    if (point.base_ref !== 'Input' && point.base_ref !== 'Concatenate' && point.base_ref !== 'Mean' && point.base_ref !== 'Maximum') {
       if (flowpoints[key].content[library]) {
         const pointcode = getPointName(dummies, key)
         msg += "\n" + dent(indent, 3) + "'" + pointcode + "': self." + pointcode + ','
       }
     }
   })
-  msg += "\n" + dent(indent, 3) + "'name':            self.name,"
-  msg += "\n" + dent(indent, 3) + "'train_loss':      self.train_loss,"
-  msg += "\n" + dent(indent, 3) + "'valid_loss':      self.valid_loss,"
-  msg += "\n" + dent(indent, 3) + "'train_loss_hist': self.train_loss_hist,"
-  msg += "\n" + dent(indent, 3) + "'valid_loss_hist': self.valid_loss_hist,"
-  msg += "\n" + dent(indent, 3) + "'optim_type':      self.optim_type,"
-  msg += "\n" + dent(indent, 3) + "'alpha':           self.alpha,"
-  msg += "\n" + dent(indent, 3) + "'criterion':       self.criterion,"
-  msg += "\n" + dent(indent, 3) + "'use_cuda':        self.use_cuda"
+  msg += "\n" + dent(indent, 3) + "'name': self.name,"
+  msg += "\n" + dent(indent, 3) + "'extras': extras,"
   msg += "\n" + dent(indent, 2) + "}, name)"
   msg += "\n\n\n" + dent(indent, 1) + "@staticmethod"
   msg += "\n" + dent(indent, 1) + "def load(name='model'):"
   msg += "\n" + dent(indent, 2) + "if not '.pth' in name: name += '.pth'"
   msg += "\n" + dent(indent, 2) + "checkpoint = torch.load(name)"
-  msg += "\n" + dent(indent, 2) + "model = NeuralNet("
-  msg += "\n" + dent(indent, 3) + "optimizer = checkpoint['optim_type'],"
-  msg += "\n" + dent(indent, 3) + "alpha     = checkpoint['alpha'],"
-  msg += "\n" + dent(indent, 3) + "criterion = checkpoint['criterion'],"
-  msg += "\n" + dent(indent, 3) + "use_cuda  = checkpoint['use_cuda']"
-  msg += "\n" + dent(indent, 2) + ")"
+  msg += "\n" + dent(indent, 2) + "model = " + modelname + "()"
   order.map(key => {
     const point = dummies[key]
-    if (point.base_ref !== 'Input') {
+    if (point.base_ref !== 'Input' && point.base_ref !== 'Concatenate' && point.base_ref !== 'Mean' && point.base_ref !== 'Maximum') {
       if (flowpoints[key].content[library]) {
         const pointcode = getPointName(dummies, key)
         msg += "\n" + dent(indent, 2) + "model." + pointcode + " = checkpoint['" + pointcode + "']"
@@ -547,27 +329,114 @@ function SaveLoad(flowpoints, dummies, order, indent, library) {
     }
   })
   msg += "\n" + dent(indent, 2) + "model.name = checkpoint['name']"
-  msg += "\n" + dent(indent, 2) + "model.train_loss = checkpoint['train_loss']"
-  msg += "\n" + dent(indent, 2) + "model.valid_loss = checkpoint['valid_loss']"
-  msg += "\n" + dent(indent, 2) + "model.train_loss_hist = checkpoint['train_loss_hist']"
-  msg += "\n" + dent(indent, 2) + "model.valid_loss_hist = checkpoint['valid_loss_hist']"
-  msg += "\n" + dent(indent, 2) + "model.startup_routines()"
-  msg += "\n" + dent(indent, 2) + "return model"
+  msg += "\n" + dent(indent, 2) + "return model, checkpoint['extras']"
 
   // Returning
   return msg
 }
 
 
-function InitModel(indent) {
-  var msg = '# Initialize model?'
-  msg += "\nif __name__ == '__main__':"
-  msg += '\n' + dent(indent, 1) + 'model = NeuralNet('
-  msg += '\n' + dent(indent, 2) + 'optimizer = optim.Adam,'
-  msg += '\n' + dent(indent, 2) + 'alpha     = 0.001,'
-  msg += '\n' + dent(indent, 2) + 'criterion = nn.CrossEntropyLoss(),'
-  msg += '\n' + dent(indent, 2) + 'use_cuda  = True'
+function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs) {
+  const formated_inputs = FormatParamInputs(dummies, inps);
+  var msg = '# Helper function for training model'
+  msg += '\n' + 'def fit(model, train, test=None, epochs=10, optimizer=optim.Adam, criterion=nn.CrossEntropyLoss, lr=0.001, batch_size=32, shuffle=True, workers=4, progress=True):'
+  msg += '\n\n' + dent(indent, 1) + '# Creating data loaders'
+  msg += '\n' + dent(indent, 1) + 'train_loader = torch.utils.data.DataLoader('
+  msg += '\n' + dent(indent, 2) + 'train,'
+  msg += '\n' + dent(indent, 2) + 'batch_size=batch_size,'
+  msg += '\n' + dent(indent, 2) + 'shuffle=shuffle,'
+  msg += '\n' + dent(indent, 2) + 'num_workers=workers'
   msg += '\n' + dent(indent, 1) + ')'
+  msg += '\n' + dent(indent, 1) + 'if test:'
+  msg += '\n' + dent(indent, 2) + 'test_loader = torch.utils.data.DataLoader('
+  msg += '\n' + dent(indent, 3) + 'test,'
+  msg += '\n' + dent(indent, 3) + 'batch_size=batch_size,'
+  msg += '\n' + dent(indent, 3) + 'shuffle=False,'
+  msg += '\n' + dent(indent, 3) + 'num_workers=workers'
+  msg += '\n' + dent(indent, 2) + ')'
+  msg += '\n\n' + dent(indent, 1) + '# Init optimizer and criterion'
+  msg += '\n' + dent(indent, 1) + "optimizer = optimizer( model.parameters(), lr=lr )"
+  msg += '\n' + dent(indent, 1) + "criterion = criterion()"
+  msg += '\n\n' + dent(indent, 1) + '# Loss records'
+  msg += '\n' + dent(indent, 1) + "train_loss_rec = []"
+  msg += '\n' + dent(indent, 1) + "test_loss_rec = []"
+  msg += '\n\n' + dent(indent, 1) + "# Device"
+  msg += '\n' + dent(indent, 1) + "device = next(model.parameters()).device"
+  msg += '\n\n' + dent(indent, 1) + "# Prep model"
+  msg += '\n' + dent(indent, 1) + "model.train()"
+  msg += '\n\n' + dent(indent, 1) + "# Showing progress?"
+  msg += '\n' + dent(indent, 1) + "if progress:"
+  msg += '\n' + dent(indent, 2) + "print(f'Running on {device}')"
+  msg += '\n' + dent(indent, 2) + "epoch_l = max(2, len(str(epochs)))"
+  msg += '\n' + dent(indent, 2) + "msg = '%sEpoch   Training loss' % ''.rjust(2 * epoch_l - 4, ' ')"
+  msg += '\n' + dent(indent, 2) + "msg += ('   Testing loss   ' if test else '') + '   Time remaining'"
+  msg += '\n' + dent(indent, 2) + "print(msg)"
+  msg += '\n' + dent(indent, 2) + "t = time.time()"
+  msg += '\n\n' + dent(indent, 1) + "# Looping through epochs"
+  msg += '\n' + dent(indent, 1) + "for epoch in range(epochs):"
+  msg += '\n\n' + dent(indent, 2) + "# Reset epoch loss"
+  msg += '\n' + dent(indent, 2) + "train_loss = 0"
+  msg += '\n' + dent(indent, 2) + "test_loss = 0"
+  msg += '\n\n' + dent(indent, 2) + "# Looping through training data"
+  msg += '\n' + dent(indent, 2) + "for " + formated_inputs + ","
+  outs.map((key, idx) => {
+    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
+  })
+  msg = msg.substring(0, msg.length - 1) + " in train_loader:"
+  msg += '\n\n' + dent(indent, 3) + "# Loss"
+  msg += '\n' + dent(indent, 3) + "loss = criterion( model("
+  inps.map(inp_key => {
+    msg += getStateName(inp_key, flowpoints, states, init_states) + '.to(device), '
+  })
+  msg = msg.substring(0, msg.length - 2)
+  msg += '),'
+  outs.map((key, idx) => {
+    msg += ' ' + getOutputTargetName(key, flowpoints) + '.to(device),'
+  })
+  msg = msg.substring(0, msg.length - 1) + ' )'
+  msg += '\n' + dent(indent, 3) + "train_loss += loss.item()"
+  msg += '\n\n' + dent(indent, 3) + "# Backward pass and optimization"
+  msg += '\n' + dent(indent, 3) + "loss.backward()       # Backward pass"
+  msg += '\n' + dent(indent, 3) + "optimizer.step()      # Optimizing weights"
+  msg += '\n' + dent(indent, 3) + "optimizer.zero_grad() # Clearing gradients"
+  msg += '\n\n' + dent(indent, 2) + "# Testing step"
+  msg += '\n' + dent(indent, 2) + "if test:"
+  msg += '\n\n' + dent(indent, 3) + "# Switching off autograd"
+  msg += '\n' + dent(indent, 3) + "with torch.no_grad():"
+  msg += '\n\n' + dent(indent, 4) + "for " + formated_inputs + ","
+  outs.map((key, idx) => {
+    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
+  })
+  msg = msg.substring(0, msg.length - 1) + " in train_loader:"
+  msg += '\n\n' + dent(indent, 5) + "# Loss"
+  msg += '\n' + dent(indent, 5) + "loss = criterion( model("
+  inps.map(inp_key => {
+    msg += getStateName(inp_key, flowpoints, states, init_states) + '.to(device), '
+  })
+  msg = msg.substring(0, msg.length - 2)
+  msg += '),'
+  outs.map((key, idx) => {
+    msg += ' ' + getOutputTargetName(key, flowpoints) + '.to(device),'
+  })
+  msg = msg.substring(0, msg.length - 1) + ' )'
+  msg += '\n' + dent(indent, 5) + "test_loss += loss.item()"
+  msg += '\n\n' + dent(indent, 2) + "# Adding loss to record"
+  msg += '\n' + dent(indent, 2) + "train_loss_rec.append(train_loss / len(train))"
+  msg += '\n' + dent(indent, 2) + "if test: test_loss_rec.append(test_loss / len(test))"
+  msg += '\n\n' + dent(indent, 2) + "# Showing progress?"
+  msg += '\n' + dent(indent, 2) + "if progress:"
+  msg += '\n' + dent(indent, 3) + "eta_s = ((time.time() - t) / (epoch + 1)) * (epochs - epoch - 1)"
+  msg += '\n' + dent(indent, 3) + "msg = '%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' '))"
+  msg += '\n' + dent(indent, 3) + "msg += ' | %s' % str(round(train_loss_rec[-1], 9)).ljust(13, ' ')"
+  msg += '\n' + dent(indent, 3) + "if test: msg += ' | %s' % str(round(test_loss_rec[-1], 9)).ljust(15, ' ')"
+  msg += '\n' + dent(indent, 3) + "msg += ' | '"
+  msg += '\n' + dent(indent, 3) + "msg += '%sh ' % round(eta_s / 3600) if eta_s > 3600 else ''"
+  msg += '\n' + dent(indent, 3) + "msg += '%sm ' % round(eta_s % 3600 / 60) if eta_s > 60 else ''"
+  msg += '\n' + dent(indent, 3) + "msg += '%ss ' % round(eta_s % 60)"
+  msg += '\n' + dent(indent, 3) + "print(msg)"
+  msg += '\n\n' + dent(indent, 1) + '# Finish and return'
+  msg += '\n' + dent(indent, 1) + 'model.eval()'
+  msg += '\n' + dent(indent, 1) + 'return train_loss_rec, test_loss_rec'
   return msg
 }
 
@@ -579,13 +448,6 @@ export function PyTorchParser(state, order, inps, states, dummies, indent, init_
 
   // Imports
   var msg = PyTorchImports(indent)
-
-  // Add flattening helper class if needed
-  var need_flattening = false;
-  Object.keys(flowpoints).map(key => {
-    if (flowpoints[key].base_ref === 'Flatten') need_flattening = true;
-  })
-  if (need_flattening) msg += '\n\n\n' + Flatten(indent)
 
   // Need hidden states?
   var got_hidden_states = false
@@ -601,16 +463,10 @@ export function PyTorchParser(state, order, inps, states, dummies, indent, init_
 
   // Adding all code
   msg += '\n\n\n' + Constructor(state, order, indent, dummies, states, init_states, got_hidden_states, library, state.settings.modelID);
-  msg += '\n\n\n' + StartupRoutines(indent);
-  if (got_hidden_states) msg += '\n\n\n' + ResetHidden(flowpoints, order, inps, states, dummies, indent, init_states, library);
-  msg += '\n\n\n' + Predict(flowpoints, inps, indent, got_hidden_states);
   msg += '\n\n\n' + Forward(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library);
-  msg += '\n\n\n' + FitStep(dummies, inps, indent, outs, flowpoints, states, init_states, got_hidden_states, library);
-  msg += '\n\n\n' + ValidationStep(dummies, inps, indent, outs, flowpoints, states, init_states, got_hidden_states, library);
-  msg += '\n\n\n' + Fit(indent, got_hidden_states);
-  msg += '\n\n\n' + PlotHist(indent);
-  msg += '\n\n\n' + SaveLoad(flowpoints, dummies, order, indent, library);
-  msg += '\n\n\n' + InitModel(indent)
+  if (got_hidden_states) msg += '\n\n\n' + ResetHidden(flowpoints, order, inps, states, dummies, indent, init_states, library);
+  msg += '\n\n\n' + SaveLoad(flowpoints, dummies, order, indent, library, state.environment.modelname === '' ? 'NeuralNet' : state.environment.modelname);
+  if (state.environment.include_training) msg += '\n\n\n\n' +  Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs)
 
   // Returning
   return msg

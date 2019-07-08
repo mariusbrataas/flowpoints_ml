@@ -465,7 +465,7 @@ export function PyTorchParser(state, order, inps, states, dummies, indent, init_
   msg += '\n\n\n' + Constructor(state, order, indent, dummies, states, init_states, got_hidden_states, library, state.settings.modelID);
   msg += '\n\n\n' + Forward(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library);
   if (got_hidden_states) msg += '\n\n\n' + ResetHidden(flowpoints, order, inps, states, dummies, indent, init_states, library);
-  msg += '\n\n\n' + SaveLoad(flowpoints, dummies, order, indent, library, state.environment.modelname === '' ? 'NeuralNet' : state.environment.modelname);
+  if (state.environment.include_saveload) msg += '\n\n\n' + SaveLoad(flowpoints, dummies, order, indent, library, state.environment.modelname === '' ? 'NeuralNet' : state.environment.modelname);
   if (state.environment.include_training) msg += '\n\n\n\n' +  Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs)
 
   // Returning

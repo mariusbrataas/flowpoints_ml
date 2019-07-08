@@ -113,6 +113,21 @@ const EnvironmentSection = props => {
 
               }}
             />
+            <SwitchContainer
+              label='include save and load'
+              value={environment.include_saveload}
+              style={{paddingTop:0}}
+              onChange={val => {
+
+                // Loading from state
+                var environment = props.refresh().environment;
+                environment.include_saveload = val;
+
+                // Updating state
+                props.updateEnvironment(environment)
+
+              }}
+            />
           </div> : null
       }
 

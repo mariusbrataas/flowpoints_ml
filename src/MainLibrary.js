@@ -25,7 +25,8 @@ export function MainLibrary() {
       dummies: {},
       batch_first: true,
       modelname: 'NeuralNet',
-      include_training: true
+      include_training: true,
+      include_saveload: true,
     },
     visual: {
       darkTheme: false,

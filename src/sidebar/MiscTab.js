@@ -128,6 +128,21 @@ const EnvironmentSection = props => {
 
               }}
             />
+            <SwitchContainer
+              label='include predict'
+              value={environment.include_predict}
+              style={{paddingTop:0}}
+              onChange={val => {
+
+                // Loading from state
+                var environment = props.refresh().environment;
+                environment.include_predict = val;
+
+                // Updating state
+                props.updateEnvironment(environment)
+
+              }}
+            />
           </div> : null
       }
 

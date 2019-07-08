@@ -27,6 +27,7 @@ export function MainLibrary() {
       modelname: 'NeuralNet',
       include_training: true,
       include_saveload: true,
+      include_predict: true,
     },
     visual: {
       darkTheme: false,

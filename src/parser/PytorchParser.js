@@ -441,6 +441,16 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
 }
 
 
+function Predict(indent, dummies, inps) {
+  const formated_inputs = FormatParamInputs(dummies, inps);
+  var msg = dent(indent, 1) + 'def predict(self, ' + formated_inputs + '):'
+  msg += '\n' + dent(indent, 2) + 'self.eval() # Switch to eval mode'
+  msg += '\n' + dent(indent, 2) + 'with torch.no_grad(): # Switch off autograd'
+  msg += '\n' + dent(indent, 3) + 'return self(' + formated_inputs + ')'
+  return msg
+}
+
+
 export function PyTorchParser(state, order, inps, states, dummies, indent, init_states, outs) {
 
   var flowpoints = state.flowpoints;
@@ -465,6 +475,7 @@ export function PyTorchParser(state, order, inps, states, dummies, indent, init_
   msg += '\n\n\n' + Constructor(state, order, indent, dummies, states, init_states, got_hidden_states, library, state.settings.modelID);
   msg += '\n\n\n' + Forward(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library);
   if (got_hidden_states) msg += '\n\n\n' + ResetHidden(flowpoints, order, inps, states, dummies, indent, init_states, library);
+  if (state.environment.include_predict) msg += '\n\n\n' + Predict(indent, dummies, inps)
   if (state.environment.include_saveload) msg += '\n\n\n' + SaveLoad(flowpoints, dummies, order, indent, library, state.environment.modelname === '' ? 'NeuralNet' : state.environment.modelname);
   if (state.environment.include_training) msg += '\n\n\n\n' +  Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs)
 

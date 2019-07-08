@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "da655a9419fef07be7ea21163da00e22",
+    "revision": "d366934c4978fad3e27cf516a684265a",
     "url": "/flowpoints_ml/index.html"
   },
   {
-    "revision": "e8e1be83676857dcf9b2",
+    "revision": "769de1ad97743a7762a9",
     "url": "/flowpoints_ml/static/css/main.47e7b40e.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/flowpoints_ml/static/js/2.ee6f19d7.chunk.js"
   },
   {
-    "revision": "e8e1be83676857dcf9b2",
-    "url": "/flowpoints_ml/static/js/main.c29d62d4.chunk.js"
+    "revision": "769de1ad97743a7762a9",
+    "url": "/flowpoints_ml/static/js/main.8ea95ff4.chunk.js"
   },
   {
     "revision": "5c83ea8d40e30e45dfab",

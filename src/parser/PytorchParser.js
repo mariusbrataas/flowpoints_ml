@@ -410,7 +410,7 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   outs.map((key, idx) => {
     msg += ' ' + getOutputTargetName(key, flowpoints) + ','
   })
-  msg = msg.substring(0, msg.length - 1) + " in train_loader:"
+  msg = msg.substring(0, msg.length - 1) + " in test_loader:"
   msg += '\n\n' + dent(indent, 6) + "# Loss"
   msg += '\n' + dent(indent, 6) + "loss = criterion( model("
   inps.map(inp_key => {

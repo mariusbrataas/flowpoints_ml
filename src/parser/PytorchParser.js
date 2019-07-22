@@ -22,9 +22,13 @@ function PyTorchImports(indent) {
   msg += '\nimport numpy as np'
   msg += '\nimport matplotlib.pyplot as plt'
   msg += '\nimport time'
+  msg += '\n\n\n# Seed'
+  msg += '\nnp.random.seed(1234)'
+  msg += '\ntorch.manual_seed(1234)'
+  msg += '\ncuda.manual_seed(1234)'
+  msg += '\ntorch.backends.cudnn.deterministic = True'
   return msg
 }
-
 
 
 function Constructor(state, order, indent, dummies, states, init_states, got_hidden_states, library, modelID) {
@@ -37,7 +41,7 @@ function Constructor(state, order, indent, dummies, states, init_states, got_hid
   // Basics
   var msg = '# Model'
   msg += '\nclass ' + modelname + '(nn.Module):'
-  msg += '\n\n\n' + dent(indent, 1) + 'def __init__(self):'
+  msg += '\n\n' + dent(indent, 1) + 'def __init__(self):'
   msg += '\n\n' + dent(indent, 2) + '# Basics'
   msg += '\n' + dent(indent, 2) + 'super(' + modelname + ', self).__init__()'
   msg += '\n' + dent(indent, 2) + 'self.name        = ' + (modelID ? ("'" + modelID + "'") : "'model'")
@@ -337,7 +341,18 @@ function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
 
 
 function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs) {
+
   const formated_inputs = FormatParamInputs(dummies, inps);
+  const formated_outputs = FormatParamInputs(dummies, outs);
+
+  var formated_inputs_with_device = ''
+  inps.map(key => formated_inputs_with_device += getPointName(dummies, key) + '.to(device), ')
+  formated_inputs_with_device = formated_inputs_with_device.substring(0, formated_inputs_with_device.length - 2)
+  
+  var formated_outputs_with_device = ''
+  outs.map(key => formated_outputs_with_device += getPointName(dummies, key) + '.to(device), ')
+  formated_outputs_with_device = formated_outputs_with_device.substring(0, formated_outputs_with_device.length - 2)
+
   var msg = '# Helper function for training model'
   msg += '\n' + 'def fit(model, train, test=None, epochs=10, optimizer=optim.Adam, criterion=nn.CrossEntropyLoss, lr=0.001, batch_size=32, shuffle=True, workers=4, progress=True):'
   msg += '\n\n' + dent(indent, 1) + '# Creating data loaders'
@@ -354,6 +369,7 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 3) + 'shuffle=False,'
   msg += '\n' + dent(indent, 3) + 'num_workers=workers'
   msg += '\n' + dent(indent, 2) + ')'
+  msg += '\n' + dent(indent, 2) + 'best_loss = 1e6'
   msg += '\n\n' + dent(indent, 1) + '# Init optimizer and criterion'
   msg += '\n' + dent(indent, 1) + "optimizer = optimizer( model.parameters(), lr=lr )"
   msg += '\n' + dent(indent, 1) + "criterion = criterion()"
@@ -380,52 +396,45 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 3) + "train_loss = 0"
   msg += '\n' + dent(indent, 3) + "test_loss = 0"
   msg += '\n\n' + dent(indent, 3) + "# Looping through training data"
-  msg += '\n' + dent(indent, 3) + "for " + formated_inputs + ","
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
-  })
-  msg = msg.substring(0, msg.length - 1) + " in train_loader:"
+  msg += '\n' + dent(indent, 3) + "for " + formated_inputs + ", " + formated_outputs + " in train_loader:"
+  msg += '\n\n' + dent(indent, 4) + "# Prediction"
+  msg += '\n' + dent(indent, 4) + "prediction = model( " + formated_inputs_with_device + ' )'
   msg += '\n\n' + dent(indent, 4) + "# Loss"
-  msg += '\n' + dent(indent, 4) + "loss = criterion( model("
-  inps.map(inp_key => {
-    msg += getStateName(inp_key, flowpoints, states, init_states) + '.to(device), '
-  })
-  msg = msg.substring(0, msg.length - 2)
-  msg += '),'
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + '.to(device),'
-  })
-  msg = msg.substring(0, msg.length - 1) + ' )'
+  msg += '\n' + dent(indent, 4) + "loss = criterion( prediction, " + formated_outputs_with_device + " )"
   msg += '\n' + dent(indent, 4) + "train_loss += loss.item()"
   msg += '\n\n' + dent(indent, 4) + "# Backward pass and optimization"
   msg += '\n' + dent(indent, 4) + "loss.backward()       # Backward pass"
   msg += '\n' + dent(indent, 4) + "optimizer.step()      # Optimizing weights"
   msg += '\n' + dent(indent, 4) + "optimizer.zero_grad() # Clearing gradients"
+  msg += '\n\n' + dent(indent, 3) + '# Adding loss to record'
+  msg += '\n' + dent(indent, 3) + 'train_loss_rec.append(train_loss / len(train))'
   msg += '\n\n' + dent(indent, 3) + "# Testing step"
   msg += '\n' + dent(indent, 3) + "if test:"
   msg += '\n\n' + dent(indent, 4) + "# Switching off autograd"
   msg += '\n' + dent(indent, 4) + "with torch.no_grad():"
+  msg += '\n\n' + dent(indent, 5) + "# Store all predictions and targets"
+  msg += '\n' + dent(indent, 5) + "all_predictions = []"
+  msg += '\n' + dent(indent, 5) + "all_targets = []"
   msg += '\n\n' + dent(indent, 5) + '# Looping through testing data'
-  msg += '\n' + dent(indent, 5) + "for " + formated_inputs + ","
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + ','
-  })
-  msg = msg.substring(0, msg.length - 1) + " in test_loader:"
+  msg += '\n' + dent(indent, 5) + "for " + formated_inputs + ", " + formated_outputs + " in test_loader:"
+  msg += '\n\n' + dent(indent, 6) + "# Prediction"
+  msg += '\n' + dent(indent, 6) + "prediction = model( " + formated_inputs_with_device + ' )'
   msg += '\n\n' + dent(indent, 6) + "# Loss"
-  msg += '\n' + dent(indent, 6) + "loss = criterion( model("
-  inps.map(inp_key => {
-    msg += getStateName(inp_key, flowpoints, states, init_states) + '.to(device), '
-  })
-  msg = msg.substring(0, msg.length - 2)
-  msg += '),'
-  outs.map((key, idx) => {
-    msg += ' ' + getOutputTargetName(key, flowpoints) + '.to(device),'
-  })
-  msg = msg.substring(0, msg.length - 1) + ' )'
+  msg += '\n' + dent(indent, 6) + "loss = criterion( prediction, " + formated_outputs_with_device + " )"
   msg += '\n' + dent(indent, 6) + "test_loss += loss.item()"
-  msg += '\n\n' + dent(indent, 3) + "# Adding loss to record"
-  msg += '\n' + dent(indent, 3) + "train_loss_rec.append(train_loss / len(train))"
-  msg += '\n' + dent(indent, 3) + "if test: test_loss_rec.append(test_loss / len(test))"
+  msg += '\n\n' + dent(indent, 6) + "# Appending predictions and targets"
+  msg += '\n' + dent(indent, 6) + "for pred, targ in zip("
+  msg += '\n' + dent(indent, 7) + "prediction.cpu().detach().numpy().squeeze(),"
+  msg += '\n' + dent(indent, 7) + formated_outputs + ".cpu().detach().numpy().squeeze()"
+  msg += '\n' + dent(indent, 6) + "):"
+  msg += '\n' + dent(indent, 7) + "all_predictions.append(pred.reshape(-1))"
+  msg += '\n' + dent(indent, 7) + "all_targets.append(targ.reshape(-1))"
+  msg += '\n\n' + dent(indent, 5) + '# Adding loss to record'
+  msg += '\n' + dent(indent, 5) + 'test_loss_rec.append(test_loss / len(test))'
+  msg += '\n\n' + dent(indent, 5) + '# Saving best model?'
+  msg += '\n' + dent(indent, 5) + 'if best_loss > test_loss_rec[-1]:'
+  msg += '\n' + dent(indent, 6) + 'best_loss = test_loss_rec[-1]'
+  msg += '\n' + dent(indent, 6) + "torch.save(model.state_dict(), 'best_model.pth')"
   msg += '\n\n' + dent(indent, 3) + "# Showing progress?"
   msg += '\n' + dent(indent, 3) + "if progress:"
   msg += '\n' + dent(indent, 4) + "eta_s = ((time.time() - t) / (epoch + 1)) * (epochs - epoch - 1)"
@@ -433,8 +442,8 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 4) + "msg += ' | %s' % str(round(train_loss_rec[-1], 9)).ljust(13, ' ')"
   msg += '\n' + dent(indent, 4) + "if test: msg += ' | %s' % str(round(test_loss_rec[-1], 9)).ljust(15, ' ')"
   msg += '\n' + dent(indent, 4) + "msg += ' | '"
-  msg += '\n' + dent(indent, 4) + "msg += '%sh ' % round(eta_s / 3600) if eta_s > 3600 else ''"
-  msg += '\n' + dent(indent, 4) + "msg += '%sm ' % round(eta_s % 3600 / 60) if eta_s > 60 else ''"
+  msg += '\n' + dent(indent, 4) + "msg += '%sh ' % round(eta_s // 3600) if eta_s > 3600 else ''"
+  msg += '\n' + dent(indent, 4) + "msg += '%sm ' % round(eta_s % 3600 // 60) if eta_s > 60 else ''"
   msg += '\n' + dent(indent, 4) + "msg += '%ss ' % round(eta_s % 60)"
   msg += '\n' + dent(indent, 4) + "print(msg)"
   msg += '\n\n' + dent(indent, 1) + '# Handling user interruption'
@@ -453,9 +462,13 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
 function Predict(indent, dummies, inps) {
   const formated_inputs = FormatParamInputs(dummies, inps);
   var msg = dent(indent, 1) + 'def predict(self, ' + formated_inputs + '):'
-  msg += '\n' + dent(indent, 2) + 'self.eval() # Switch to eval mode'
-  msg += '\n' + dent(indent, 2) + 'with torch.no_grad(): # Switch off autograd'
-  msg += '\n' + dent(indent, 3) + 'return self(' + formated_inputs + ')'
+  msg += '\n' + dent(indent, 2) + 'device = next(self.parameters()).device # Current device'
+  msg += '\n' + dent(indent, 2) + 'self.eval()                             # Switch to eval mode'
+  msg += '\n' + dent(indent, 2) + 'with torch.no_grad():                   # Switch off autograd'
+  msg += '\n' + dent(indent, 3) + 'return self('
+  inps.map(key => msg += getPointName(dummies, key) + '.to(device), ')
+  msg = msg.substring(0, msg.length - 2)
+  msg += ')'
   return msg
 }
 

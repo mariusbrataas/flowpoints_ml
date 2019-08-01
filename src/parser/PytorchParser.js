@@ -340,6 +340,56 @@ function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
 }
 
 
+function ProgressPrinter(indent) {
+  var msg = '# Helper for printing progress'
+  msg += '\nclass ProgressPrinter:'
+  msg += '\n\n' + dent(indent, 1) + 'def __init__(self, epochs, metrics=[]):'
+  msg += '\n\n' + dent(indent, 2) + '# Settings'
+  msg += '\n' + dent(indent, 2) + 'self.epochs = epochs'
+  msg += '\n' + dent(indent, 2) + 'self.metrics = metrics if type(metrics) == list else [metrics]'
+  msg += '\n\n' + dent(indent, 2) + '# Helper variables'
+  msg += '\n' + dent(indent, 2) + 'self.epochs_l = 2 * len(str(self.epochs)) + 1'
+  msg += '\n' + dent(indent, 2) + 'self.start_time = time.time()'
+  msg += '\n' + dent(indent, 2) + 'self.log = {'
+  msg += '\n' + dent(indent, 3) + 'metric:[]'
+  msg += '\n' + dent(indent, 3) + "for metric in ['Train loss', 'Test loss'] + [_.__name__ for _ in self.metrics]"
+  msg += '\n' + dent(indent, 2) + '}'
+  msg += '\n\n' + dent(indent, 2) + '# Print header'
+  msg += '\n' + dent(indent, 2) + "msg = 'Epoch'.rjust(self.epochs_l)"
+  msg += '\n' + dent(indent, 2) + "msg += '   ' + 'Train loss'"
+  msg += '\n' + dent(indent, 2) + "msg += '   ' + 'Test loss'"
+  msg += '\n' + dent(indent, 2) + "msg += '   ' + 'Time left'.rjust(12)"
+  msg += '\n' + dent(indent, 2) + 'for metric in self.metrics:'
+  msg += '\n' + dent(indent, 3) + "msg += '   ' + metric.__name__.replace('_score','').rjust(8)"
+  msg += '\n' + dent(indent, 2) + 'print(msg)'
+  msg += '\n\n\n' + dent(indent, 1) + 'def get_log(self):'
+  msg += '\n' + dent(indent, 2) + 'return pd.DataFrame.from_dict(self.log)'
+  msg += '\n\n\n' + dent(indent, 1) + 'def step(self, epoch, targets, predictions, train_loss, test_loss=None):'
+  msg += '\n\n' + dent(indent, 2) + '# Epoch and loss'
+  msg += '\n' + dent(indent, 2) + "msg = (str(epoch + 1) + '/' + str(self.epochs)).rjust(self.epochs_l)"
+  msg += '\n' + dent(indent, 2) + "msg += ' | ' + str(train_loss).rjust(10)[:10]"
+  msg += '\n' + dent(indent, 2) + "msg += ' | ' + str(test_loss).rjust(9)[:9]"
+  msg += '\n' + dent(indent, 2) + "self.log['Train loss'].append(train_loss)"
+  msg += '\n' + dent(indent, 2) + "self.log['Test loss'].append(test_loss)"
+  msg += '\n\n' + dent(indent, 2) + "# ETA"
+  msg += '\n' + dent(indent, 2) + "eta_s = ((time.time() - self.start_time) / (epoch + 1)) * (self.epochs - epoch - 1)"
+  msg += '\n' + dent(indent, 2) + "eta_msg = f'{round(eta_s // 3600)}h ' if eta_s > 3600 else ''"
+  msg += '\n' + dent(indent, 2) + "eta_msg += f'{round(eta_s % 3600 // 60)}m ' if eta_s > 60 else ''"
+  msg += '\n' + dent(indent, 2) + "eta_msg += f'{round(eta_s % 60)}s'"
+  msg += '\n' + dent(indent, 2) + "msg += ' | ' + eta_msg.rjust(12)"
+  msg += '\n\n' + dent(indent, 2) + "# Metrics"
+  msg += '\n' + dent(indent, 2) + "for metric in self.metrics:"
+  msg += '\n' + dent(indent, 3) + "value = metric(targets, predictions)"
+  msg += '\n' + dent(indent, 3) + "_name = metric.__name__.replace('_score','').rjust(8)"
+  msg += '\n' + dent(indent, 3) + "l = len(_name)"
+  msg += '\n' + dent(indent, 3) + "msg += ' | ' + str(value).rjust(l)[:l]"
+  msg += '\n' + dent(indent, 3) + "self.log[metric.__name__].append(value)"
+  msg += '\n\n' + dent(indent, 2) + "# Print message"
+  msg += '\n' + dent(indent, 2) + "print(msg)"
+  return msg
+}
+
+
 function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_hidden_states, library, outs) {
 
   const formated_inputs = FormatParamInputs(dummies, inps);
@@ -353,8 +403,21 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   outs.map(key => formated_outputs_with_device += getPointName(dummies, key) + '.to(device), ')
   formated_outputs_with_device = formated_outputs_with_device.substring(0, formated_outputs_with_device.length - 2)
 
-  var msg = '# Helper function for training model'
-  msg += '\n' + 'def fit(model, train, test=None, epochs=10, optimizer=optim.Adam, criterion=nn.CrossEntropyLoss, lr=0.001, batch_size=32, shuffle=True, workers=4, progress=True):'
+  var msg = ProgressPrinter(indent)
+
+  msg += '\n\n\n\n# Helper function for training model'
+  msg += '\n' + 'def fit(model,'
+  msg += '\n' + dent(indent, 2) + 'train,'
+  msg += '\n' + dent(indent, 2) + 'test=None,'
+  msg += '\n' + dent(indent, 2) + 'epochs=10,'
+  msg += '\n' + dent(indent, 2) + 'optimizer=optim.Adam,'
+  msg += '\n' + dent(indent, 2) + 'criterion=nn.CrossEntropyLoss,'
+  msg += '\n' + dent(indent, 2) + 'lr=0.001,'
+  msg += '\n' + dent(indent, 2) + 'batch_size=32,'
+  msg += '\n' + dent(indent, 2) + 'shuffle=True,'
+  msg += '\n' + dent(indent, 2) + 'workers=4,'
+  msg += '\n' + dent(indent, 2) + 'save_best=True,'
+  msg += '\n' + dent(indent, 2) + 'metrics=[]):'
   msg += '\n\n' + dent(indent, 1) + '# Creating data loaders'
   msg += '\n' + dent(indent, 1) + 'train_loader = torch.utils.data.DataLoader('
   msg += '\n' + dent(indent, 2) + 'train,'
@@ -371,30 +434,23 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 2) + ')'
   msg += '\n' + dent(indent, 2) + 'best_loss = 1e6'
   msg += '\n\n' + dent(indent, 1) + '# Init optimizer and criterion'
-  msg += '\n' + dent(indent, 1) + "optimizer = optimizer( model.parameters(), lr=lr )"
+  msg += '\n' + dent(indent, 1) + "optimizer = optimizer( filter(lambda p: p.requires_grad, model.parameters()), lr=lr )"
   msg += '\n' + dent(indent, 1) + "criterion = criterion()"
-  msg += '\n\n' + dent(indent, 1) + '# Loss records'
-  msg += '\n' + dent(indent, 1) + "train_loss_rec = []"
-  msg += '\n' + dent(indent, 1) + "test_loss_rec = []"
   msg += '\n\n' + dent(indent, 1) + "# Device"
   msg += '\n' + dent(indent, 1) + "device = next(model.parameters()).device"
+  msg += '\n' + dent(indent, 1) + "print(f'Training model on {device}')"
   msg += '\n\n' + dent(indent, 1) + "# Prep model"
   msg += '\n' + dent(indent, 1) + "model.train()"
-  msg += '\n\n' + dent(indent, 1) + "# Showing progress?"
-  msg += '\n' + dent(indent, 1) + "if progress:"
-  msg += '\n' + dent(indent, 2) + "print(f'Running on {device}')"
-  msg += '\n' + dent(indent, 2) + "epoch_l = max(2, len(str(epochs)))"
-  msg += '\n' + dent(indent, 2) + "msg = '%sEpoch   Training loss' % ''.rjust(2 * epoch_l - 4, ' ')"
-  msg += '\n' + dent(indent, 2) + "msg += ('   Testing loss   ' if test else '') + '   Time remaining'"
-  msg += '\n' + dent(indent, 2) + "print(msg)"
-  msg += '\n' + dent(indent, 2) + "t = time.time()"
+  msg += '\n\n' + dent(indent, 1) + "# Progress"
+  msg += '\n' + dent(indent, 1) + "progress_printer = ProgressPrinter(epochs, metrics)"
   msg += '\n\n' + dent(indent, 1) + '# Gracefully interrupting training'
   msg += '\n' + dent(indent, 1) + 'try:'
   msg += '\n\n' + dent(indent, 2) + "# Looping through epochs"
   msg += '\n' + dent(indent, 2) + "for epoch in range(epochs):"
   msg += '\n\n' + dent(indent, 3) + "# Reset epoch loss"
-  msg += '\n' + dent(indent, 3) + "train_loss = 0"
-  msg += '\n' + dent(indent, 3) + "test_loss = 0"
+  msg += '\n' + dent(indent, 3) + "train_loss, test_loss = 0, 0"
+  msg += '\n\n' + dent(indent, 3) + "# Reset predictions and targets"
+  msg += '\n' + dent(indent, 3) + "predictions, targets = [], []"
   msg += '\n\n' + dent(indent, 3) + "# Looping through training data"
   msg += '\n' + dent(indent, 3) + "for " + formated_inputs + ", " + formated_outputs + " in train_loader:"
   msg += '\n\n' + dent(indent, 4) + "# Prediction"
@@ -406,15 +462,12 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 4) + "loss.backward()       # Backward pass"
   msg += '\n' + dent(indent, 4) + "optimizer.step()      # Optimizing weights"
   msg += '\n' + dent(indent, 4) + "optimizer.zero_grad() # Clearing gradients"
-  msg += '\n\n' + dent(indent, 3) + '# Adding loss to record'
-  msg += '\n' + dent(indent, 3) + 'train_loss_rec.append(train_loss / len(train))'
+  msg += '\n\n' + dent(indent, 3) + '# Average train loss'
+  msg += '\n' + dent(indent, 3) + 'train_loss /= len(train)'
   msg += '\n\n' + dent(indent, 3) + "# Testing step"
   msg += '\n' + dent(indent, 3) + "if test:"
   msg += '\n\n' + dent(indent, 4) + "# Switching off autograd"
   msg += '\n' + dent(indent, 4) + "with torch.no_grad():"
-  msg += '\n\n' + dent(indent, 5) + "# Store all predictions and targets"
-  msg += '\n' + dent(indent, 5) + "all_predictions = []"
-  msg += '\n' + dent(indent, 5) + "all_targets = []"
   msg += '\n\n' + dent(indent, 5) + '# Looping through testing data'
   msg += '\n' + dent(indent, 5) + "for " + formated_inputs + ", " + formated_outputs + " in test_loader:"
   msg += '\n\n' + dent(indent, 6) + "# Prediction"
@@ -423,38 +476,34 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 6) + "loss = criterion( prediction, " + formated_outputs_with_device + " )"
   msg += '\n' + dent(indent, 6) + "test_loss += loss.item()"
   msg += '\n\n' + dent(indent, 6) + "# Appending predictions and targets"
-  msg += '\n' + dent(indent, 6) + "for pred, targ in zip("
-  msg += '\n' + dent(indent, 7) + "prediction.cpu().detach().numpy().squeeze(),"
-  msg += '\n' + dent(indent, 7) + formated_outputs + ".cpu().detach().numpy().squeeze()"
-  msg += '\n' + dent(indent, 6) + "):"
-  msg += '\n' + dent(indent, 7) + "all_predictions.append(pred.reshape(-1))"
-  msg += '\n' + dent(indent, 7) + "all_targets.append(targ.reshape(-1))"
-  msg += '\n\n' + dent(indent, 5) + '# Adding loss to record'
-  msg += '\n' + dent(indent, 5) + 'test_loss_rec.append(test_loss / len(test))'
+  msg += '\n' + dent(indent, 6) + "for pred, targ in zip(prediction.cpu().detach().numpy().squeeze(),"
+  msg += '\n' + dent(indent, 11) + '  ' + formated_outputs + ".cpu().detach().numpy().squeeze()):"
+  msg += '\n' + dent(indent, 7) + "predictions.append(pred.reshape(-1))"
+  msg += '\n' + dent(indent, 7) + "targets.append(targ.reshape(-1))"
+  msg += '\n\n' + dent(indent, 5) + '# Average test loss'
+  msg += '\n' + dent(indent, 5) + 'test_loss /= len(test)'
   msg += '\n\n' + dent(indent, 5) + '# Saving best model?'
-  msg += '\n' + dent(indent, 5) + 'if best_loss > test_loss_rec[-1]:'
-  msg += '\n' + dent(indent, 6) + 'best_loss = test_loss_rec[-1]'
+  msg += '\n' + dent(indent, 5) + 'if save_best and best_loss > test_loss:'
+  msg += '\n' + dent(indent, 6) + 'best_loss = test_loss'
   msg += '\n' + dent(indent, 6) + "torch.save(model.state_dict(), 'best_model.pth')"
-  msg += '\n\n' + dent(indent, 3) + "# Showing progress?"
-  msg += '\n' + dent(indent, 3) + "if progress:"
-  msg += '\n' + dent(indent, 4) + "eta_s = ((time.time() - t) / (epoch + 1)) * (epochs - epoch - 1)"
-  msg += '\n' + dent(indent, 4) + "msg = '%s/%s' % (str(epoch + 1).rjust(epoch_l, ' '), str(epochs).ljust(epoch_l, ' '))"
-  msg += '\n' + dent(indent, 4) + "msg += ' | %s' % str(round(train_loss_rec[-1], 9)).ljust(13, ' ')"
-  msg += '\n' + dent(indent, 4) + "if test: msg += ' | %s' % str(round(test_loss_rec[-1], 9)).ljust(15, ' ')"
-  msg += '\n' + dent(indent, 4) + "msg += ' | '"
-  msg += '\n' + dent(indent, 4) + "msg += '%sh ' % round(eta_s // 3600) if eta_s > 3600 else ''"
-  msg += '\n' + dent(indent, 4) + "msg += '%sm ' % round(eta_s % 3600 // 60) if eta_s > 60 else ''"
-  msg += '\n' + dent(indent, 4) + "msg += '%ss ' % round(eta_s % 60)"
-  msg += '\n' + dent(indent, 4) + "print(msg)"
+  msg += '\n\n' + dent(indent, 3) + "# Progress"
+  msg += '\n' + dent(indent, 3) + "progress_printer.step(epoch,"
+  msg += '\n' + dent(indent, 8) + "  np.array(targets),"
+  msg += '\n' + dent(indent, 8) + "  np.array(predictions),"
+  msg += '\n' + dent(indent, 8) + "  train_loss,"
+  msg += '\n' + dent(indent, 8) + "  test_loss)"
   msg += '\n\n' + dent(indent, 1) + '# Handling user interruption'
   msg += '\n' + dent(indent, 1) + 'except KeyboardInterrupt:'
   msg += '\n' + dent(indent, 2) + "print('Gracefully interrupting training')"
-  msg += '\n' + dent(indent, 2) + 'model.eval()'
-  msg += '\n' + dent(indent, 2) + 'cuda.empty_cache()'
+  msg += '\n' + dent(indent, 2) + 'optimizer.zero_grad()'
   msg += '\n' + dent(indent, 2) + 'pass'
   msg += '\n\n' + dent(indent, 1) + '# Finish and return'
   msg += '\n' + dent(indent, 1) + 'model.eval()'
-  msg += '\n' + dent(indent, 1) + 'return train_loss_rec, test_loss_rec'
+  msg += '\n' + dent(indent, 1) + 'train_loader, test_loader = None, None'
+  msg += '\n' + dent(indent, 1) + 'del train_loader'
+  msg += '\n' + dent(indent, 1) + 'del test_loader'
+  msg += '\n' + dent(indent, 1) + 'cuda.empty_cache()'
+  msg += '\n' + dent(indent, 1) + 'return progress_printer.get_log()'
   return msg
 }
 

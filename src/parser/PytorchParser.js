@@ -20,7 +20,7 @@ function PyTorchImports(indent) {
   msg += '\nfrom torch import nn, optim, cuda'
   msg += '\n\n\n# Importing other libraries'
   msg += '\nimport numpy as np'
-  msg += '\nimport matplotlib.pyplot as plt'
+  msg += '\nimport pandas as pd'
   msg += '\nimport time'
   msg += '\n\n\n# Seed'
   msg += '\nnp.random.seed(1234)'

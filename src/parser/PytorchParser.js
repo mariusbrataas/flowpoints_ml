@@ -300,8 +300,8 @@ function Forward(flowpoints, order, inps, states, dummies, indent, init_states, 
 
 }
 
-
-function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
+// Outdated save and load. Will be deleted.
+function SaveLoad_old(flowpoints, dummies, order, indent, library, modelname) {
   var msg = dent(indent, 1) + "def save(self, name=None, extras={}):"
   msg += '\n' + dent(indent, 2) + "if not name: name = self.name"
   msg += '\n' + dent(indent, 2) + "if not '.pth' in name: name += '.pth'"
@@ -336,6 +336,21 @@ function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
   msg += "\n" + dent(indent, 2) + "return model, checkpoint['extras']"
 
   // Returning
+  return msg
+}
+
+
+function SaveLoad(flowpoints, dummies, order, indent, library, modelname) {
+  var msg = dent(indent, 1) + "def save(self, path):"
+  msg += '\n' + dent(indent, 2) + "if not '.pt' in path: path += '.pt'"
+  msg += '\n' + dent(indent, 2) + "torch.save( self.state_dict(), path )"
+  msg += '\n\n\n' + dent(indent, 1) + "@staticmethod"
+  msg += '\n' + dent(indent, 1) + "def load(path):"
+  msg += '\n' + dent(indent, 2) + "if not '.pt' in path: path += '.pt'"
+  msg += '\n' + dent(indent, 2) + "model = " + modelname + "()"
+  msg += '\n' + dent(indent, 2) + "model.load_state_dict( torch.load(path) )"
+  msg += '\n' + dent(indent, 2) + "model.eval()"
+  msg += '\n' + dent(indent, 2) + "return model"
   return msg
 }
 
@@ -499,9 +514,6 @@ function Fit(flowpoints, order, inps, states, dummies, indent, init_states, got_
   msg += '\n' + dent(indent, 2) + 'pass'
   msg += '\n\n' + dent(indent, 1) + '# Finish and return'
   msg += '\n' + dent(indent, 1) + 'model.eval()'
-  msg += '\n' + dent(indent, 1) + 'train_loader, test_loader = None, None'
-  msg += '\n' + dent(indent, 1) + 'del train_loader'
-  msg += '\n' + dent(indent, 1) + 'del test_loader'
   msg += '\n' + dent(indent, 1) + 'cuda.empty_cache()'
   msg += '\n' + dent(indent, 1) + 'return progress_printer.get_log()'
   return msg
